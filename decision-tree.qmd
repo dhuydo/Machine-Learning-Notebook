@@ -32,7 +32,7 @@ from sklearn.tree import DecisionTreeClassifier
 iris = load_iris(as_frame=True)
 X_iris = iris.data[["petal length (cm)", "petal width (cm)"]].values
 y_iris = iris.target
-some_flower = X_train[100,:]
+some_flower = X_iris[100,:]
 
 dt_clf = DecisionTreeClassifier(max_depth=2, random_state=29)
 dt_clf.fit(X_iris, y_iris)
