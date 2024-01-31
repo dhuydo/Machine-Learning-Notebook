@@ -1,0 +1,53 @@
+{
+  "index.qmd": {
+    "index.html": "954159a1"
+  },
+  "intro.qmd": {
+    "intro.html": "ca0c498a"
+  },
+  "summary.qmd": {
+    "summary.html": "c5bc499c"
+  },
+  "references.qmd": {
+    "references.html": "0e516965"
+  },
+  "pca.qmd": {
+    "pca.html": "9f2db780"
+  },
+  "landscape.qmd": {
+    "landscape.html": "4f9045b7"
+  },
+  "project-checklist.qmd": {
+    "project-checklist.html": "fe5c3079"
+  },
+  "project.qmd": {
+    "project.html": "d292c389"
+  },
+  "dim-reduction.qmd": {
+    "dim-reduction.html": "3eb08304"
+  },
+  "hands-on-classification.qmd": {
+    "hands-on-classification.html": "e9b4c14d"
+  },
+  "regression.qmd": {
+    "regression.html": "b408b99e"
+  },
+  "classification.qmd": {
+    "classification.html": "29f2c262"
+  },
+  "hands-on-regression.qmd": {
+    "hands-on-regression.html": "89e0a8e0"
+  },
+  "gradient-descent.qmd": {
+    "gradient-descent.html": "7ba62724"
+  },
+  "metrics.qmd": {
+    "metrics.html": "a39be894"
+  },
+  "svm.qmd": {
+    "svm.html": "f26b209a"
+  },
+  "decision-tree.qmd": {
+    "decision-tree.html": "dba38055"
+  }
+}

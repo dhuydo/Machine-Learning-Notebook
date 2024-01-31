@@ -1,0 +1,199 @@
+# Support Vector Machine {#sec-svm}
+
+
+
+Support Vector Machine (SVM) is a powerful and versatile machine learning model, capable of performing linear or nonlinear classification, regression, and even novelty detection. It works well with small to medium-sized datasets, but unfortunately do not scale well and sensitive to feature scaling.
+
+::: {.callout-note collapse="true"}
+## Important notes to remember
+- SVMs: fit the largest street while limiting the margin violations, supported by support vector on the street (SVC) or off the street (SVR).\
+- Hyperparameters: C, gamma ([Really simple explaination](https://www.quora.com/What-are-C-and-gamma-with-regards-to-a-support-vector-machine))\
+- SVMs: only have `predict` and `decision_function` method.\
+- Kernel trick: handle non-linear dataset efficiently\
+- LinearSVC/LinearSVR use *liblinear* library: optimize for linear SVMs, scale well
+- SVC/SVR classes use *libsvm*: support kernel trick, scale badly
+:::
+
+
+
+## Linear SVM Classification (Support Vector Classification - SVC)
+
+Support Vector Machine (Large Margin Classification): Fitting the widest street between classes, supported by support vector instances *on* the street. 
+
+![Large margin classification](images/svm.png){#fig-svm}
+
+SVMs are sensitive to feature scaling. As we can see, SVM seperate the data better with scaled data.
+
+![SVMs are sensitive to feature scaling](images/svm-scaling.png){#fig-feature-scaling}
+
+**Hard margin/Soft margin classification**\
+- Hard margin: All instances must be off the street, only work with linearly seperable data and sensitive to outliers\
+- Soft margin: improve weakness of hard margin by allow limiting margin violations
+
+::: {.callout-note}
+**Hyperparameter C**: the penalty on any misclassified data point.\
+    - High: high penalty, stricter classification, narrower street and tends to overfit\
+    - Low: low penalty, allow larger number of misclassifications, wider street and tends to underfit
+:::
+
+![Different C parameters](images/parameter-c.png){#fig-parameter-c}
+
+**Implement SVC**
+
+```{python}
+from sklearn.datasets import load_iris
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import StandardScaler
+from sklearn.svm import LinearSVC
+
+data = load_iris(as_frame=True)
+X = data.data[["petal length (cm)", "petal width (cm)"]].values
+y = (data.target == 2) # Iris virginica
+some_flower = X[2,:]
+svc = make_pipeline(StandardScaler(),
+LinearSVC(random_state=29))
+svc.fit(X, y)
+print(svc.predict([some_flower]))
+print(svc.decision_function([some_flower]))
+```
+
+
+## Non-linear SVM Classification {#sec-nonlinear-svm}
+
+With non-linearly seperable datasets in low dimensions, we want to transform them to a higher dimension where they will be linearly sepparable. Imagine "raising" the green points, then you can sepparate them from the red points with a plane (hyperplane).
+
+![Non-linearly seperable](images/nonlinearly-seperable.png){#fig-nonlinearly-seperable}
+
+To do that, we can use more complex models (Random forest, etc.) or add more features (Polynomial features, similarity features using Gaussian RBF, etc.), but this will lead to a huge bunch of new features and computationally expensive.
+
+Therefore, SVM supply a powerful technique called `kernel trick`, allow us to get the same result as if add many polynomial/similarity features, without actually having to add them.
+
+**Polynomial kernel**
+
+```{python}
+from sklearn.svm import SVC
+
+poly_svc = make_pipeline(StandardScaler(),
+SVC(kernel='poly', degree=3, C=10, coef0=1))
+```
+
+**Gaussian RBF kernel**
+
+```{python}
+rbf_svc = make_pipeline(StandardScaler(),
+SVC(kernel='rbf', C=10, gamma=5))
+```
+
+::: {.callout-note}
+- coef0 (poly kernel): controls how much the model is influenced by high-degree terms versus low-degree terms.\
+- gamma (RBF kernel): high => overfitting, low => underfitting\
+
+- gamma: controls the shape of the "peaks" where you raise the points
+    - High: pointed bump (narrow bell-shaped curve), each instance’s range of influence is smaller, tend to wiggling around individual instances
+    - Low: softer, broader bump (wide bell-shaped curve), vice versa.
+:::
+
+![Different C and gamma parameters](images/c-gamma.png){#fig-c-gamma}
+
+## SVMs Classes Computational Complexity
+
+![BigO of SVM classification](images/svm-bigO.png){#fig-svm-bigO}
+
+
+## SVM Regression (Support Vector Regression - SVR)
+
+Opposed to SVC, SVR tries to fit as many instances as possible on the street while limiting margin violations (instances *off* the street)
+
+Hyperparameter epsilon: control the width of the street
+    - Low: narrow street, more support vector, tend to too complex
+    - High: wide street, less support vector, tend to too simple
+
+```{python}
+import numpy as np
+from sklearn.svm import SVR
+
+np.random.seed(29)
+m = 100
+X = 6 * np.random.rand(m, 1) - 3
+y = 0.5 * X ** 2 + X + 2 + np.random.randn(m, 1)
+
+svr = make_pipeline(StandardScaler(),
+SVR(kernel='poly', degree=5, C=0.001, epsilon=0.1))
+svr.fit(X,y.ravel())
+svr.predict([[3]])
+```
+
+![Different epsilons](images/different-epsilon.png){#fig-different-epsilon}
+
+
+## Understand the Fundamentals of SVM
+
+
+To predict the class of an instance, SVM compute decision function, then compare to the margin of the street to predict.
+
+$$y = θ_{0} + θ^{Τ}X$$
+
+Suppose that the margin is (-1,1). With the same margin, to make the wider street, we have to make the θ smaller. 
+
+![A smaller weights results in a larger margin](images/small-weights.png){#fig-small-weigths}
+
+
+### Quadratic Programming Problem (QP solver)
+
+**Hard margin classification**
+
+To avoid the margin violations, we have to minimize the θ while making the decision function ≥1 for positive instances and ≤-1 for negative instances. This constraint can be written using t = 1 or t = -1 repectively:
+
+$$
+\begin{gather}
+minimize(θ,θ_{0})\;\;\frac{1}{2}θ^{Τ}θ\\
+subject\;to\;\;t(θ_{0} + θ^{Τ}X) ≥ 1;\;\;t_{i} = [-1;1]
+\end{gather}
+$$
+
+**Soft margin classification**
+
+To perform soft margin classification, we add a *slack variable ζ(i) ≥ 0* for each instance: ζ measure how much the instance is allowed to violate the margin.
+
+Expectedly, we want to keep ζ as small as possible to reduce margin violations, but we also want the margin as wide as possible (too greedy 😆). Don't worry, this is where the C parameter comes into play.
+
+$$
+\begin{gather}
+minimize(θ,θ_{0})\;\;\frac{1}{2}θ^{Τ}θ + Cζ\\
+subject\;to\;\;t(θ_{0} + θ^{Τ}X) ≥ 1 - ζ;\;\;t_{i} = [-1;1];\;ζ_{i}≥0
+\end{gather}
+$$
+
+
+### Gradient Descent
+
+Cost function: `hinge loss` or the `squared hinge loss` (*loss* hyperparameter)
+
+Decision function:\
+    - ≥ 1: true label is positive => loss = 0\
+    - ≤-1: true label is negative => loss = 0
+
+By default: LinearSVC use squared hinge loss, while SGDClassifier use hinge loss
+
+![The hinge loss and squared hinge loss](images/hinge-loss.png){#fig-hinge-loss}
+
+
+### Kernelized SVMs
+
+As mentioned in @sec-nonlinear-svm, when we want to perform on more complex model like polynomial or RBF, kernel trick can compute the dot product in the minimization work directly on the original vectors a and b, without even know about the transformation. The @fig-kernel-trick illustrate the kernel trick for a second-degree polynomial 
+
+![Kernel trick for a second-degree polynomial](images/kernel-trick.png){#fig-kernel-trick}
+
+These are the common kernels, in which K is the kernel function:
+
+![Common kernels](images/common-kernels.png){#fig-common-kernels}
+
+- d: degree
+- r: coef0
+- γ: gamma, ≥ 0
+
+
+::: {.callout-important}
+Learn more about Dual problem, equation to make predictions with kernel trick
+:::
+

@@ -1,0 +1,577 @@
+# Hands-on Classification {#sec-hands-on-classification}
+
+
+
+## Describe the used dataset
+
+- Name: MNIST
+- Author: Yann LeCun, Corinna Cortes, Christopher J.C. Burges
+- Content: 70,000 images of digits handwritten
+- Source: [MNIST Website](http://yann.lecun.com/exdb/mnist/)
+
+
+## Get data
+
+### Download data
+
+```{python}
+from sklearn.datasets import fetch_openml
+
+mnist = fetch_openml('mnist_784', as_frame=False)       # as_frame=False: get data as Numpy Array instead of Pandas DataFrame
+mnist.DESCR
+```
+
+### Quick Look
+```{python}
+## Size of dataset
+
+X,y = mnist.data, mnist.target
+print(X.shape, y.shape)
+```
+
+```{python}
+## Quick look
+
+import matplotlib.pyplot as plt
+
+def plot_digit(data):
+    image = data.reshape(28,28)
+    plt.imshow(image, cmap='binary')   # binary: grayscale color map from 0 (white) to 255 (black)
+    
+some_digit = X[0]    # Look at first digit
+plot_digit(some_digit)
+plt.show()
+```
+
+### Create train, test set
+```{python}
+
+## Split dataset into train set and test set as its describe (train: first 60000 images, test: last 10000 images)
+
+X_train, X_test, y_train, y_test = X[:60000], X[60000:], y[:60000], y[60000:]
+print(X_train.shape)
+```
+
+## Create a Binary Classfier(5 or non-5)
+
+```{python}
+## Target labels
+
+y_train_5 = (y_train == '5')
+y_test_5 = (y_test == '5')
+```
+
+
+### Stochastic Gradient Descent
+
+
+#### Train model
+
+```{python}
+from sklearn.linear_model import SGDClassifier
+
+sgd_clf = SGDClassifier(random_state=42)
+sgd_clf.fit(X_train, y_train_5)
+
+sgd_clf.predict([some_digit])
+```
+
+#### Evaluate model
+
+::: {.callout-tip}
+Metrics:\
+    - Accuracy\
+    - Confusion matrix: Precision, Recall (TPR), FPR, ROC, ROC AUC\
+    - Plot: Precision-Recall Curve, ROC Curve\
+Use case:\
+    - Precision-Recall Curve: aim to care more about `false positives` than the `false negatives`\
+    - Otherwise: ROC Curve
+:::
+
+**Accuracy**
+
+```{python}
+from sklearn.model_selection import cross_val_score
+
+cross_val_score(sgd_clf, X_train, y_train_5, cv=3, scoring='accuracy')
+```
+
+::: {.callout-warning}
+The accuracy scores are pretty good, but it may be due to the class imbalance. Let take a look at a Dummy Model which always classify as the most frequent class
+:::
+
+```{python}
+## Dummy classifier
+
+from sklearn.dummy import DummyClassifier
+from sklearn.model_selection import cross_val_score
+
+dummy_model = DummyClassifier(random_state=248)
+cross_val_score(dummy_model, X_train, y_train_5, cv=3, scoring='accuracy')
+```
+
+::: {.callout-important}
+The accuracy scores are over 90% because there's only about 10% of training set are 5 digit\
+=> With class imbalance, accuracy score is not a useful metric\
+=> We will use other metrics such as Precision, Recall, ROC Curve, AUC
+:::
+
+**Confusion Matrix**
+
+```{python}
+from sklearn.model_selection import cross_val_predict
+from sklearn.metrics import confusion_matrix
+
+y_train_pred = cross_val_predict(sgd_clf, X_train, y_train_5, cv=3)
+confusion_matrix(y_train_5, y_train_pred)
+```
+
+```{python}
+## Precision and Recall
+
+from sklearn.metrics import precision_score, recall_score
+
+print(f'Precision scores: {precision_score(y_train_5, y_train_pred):.4f}')
+print(f'Recall scores: {recall_score(y_train_5, y_train_pred):.4f}')
+```
+
+```{python}
+## F1-score
+
+from sklearn.metrics import f1_score
+
+print(f'F1-score: {f1_score(y_train_5, y_train_pred):.4f}')
+```
+
+
+**Precision-Recall Trade-off**
+
+- Compute the scores of all instances in the training using *decision_function*
+- Change the threshold to see the difference
+
+```{python}
+y_score = sgd_clf.decision_function([some_digit])
+
+threshold = [0, 1000, 3000]
+for thr in threshold:
+    print(f'With threshold of {thr:4d}: predicted value is {y_score>thr}')
+```
+
+::: {.callout-important}
+**How to choose the suitable threshold?**
+
+- Use Precision-Recall Curve
+- precision_recall_curve: require *scores* computed from decision_function or *probabilities* from predict_proba
+:::
+
+```{python}
+## Precision-Recall Curve
+
+
+### Compute scores by decision_function
+
+y_scores = cross_val_predict(sgd_clf, X_train, y_train_5, method='decision_function')
+
+### Plot Precision-Recall Curve vs Threshold
+
+from sklearn.metrics import precision_recall_curve
+
+precisions, recalls, thresholds = precision_recall_curve(y_train_5, y_scores)
+
+plt.plot(thresholds, precisions[:-1], label='Precision', color='darkslateblue')
+plt.plot(thresholds, recalls[:-1], label='Recall', color='crimson')
+plt.grid()
+plt.legend(loc='center left')
+plt.xlim([-100000,40000])
+plt.title('Precision and Recall versus Threshold')
+plt.show()
+```
+
+::: {.callout-note}
+The higher Precision, the lower Recall and vice versa
+:::
+
+```{python}
+## Plot Precision versus Recall
+
+plt.plot(recalls, precisions)
+plt.title('Precision versus Recall')
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.grid()
+
+plt.show()
+```
+
+::: {.callout-tip}
+Depend on your project, you would trade between precision and recall
+:::
+
+```{python}
+## Find Threshold of over 0.90 Precision
+
+idx_90_precision = (precisions >= 0.90).argmax()
+threshold_90_precision = thresholds[idx_90_precision]
+threshold_90_precision
+```
+
+```{python}
+y_train_90_precision = (y_scores > threshold_90_precision)
+
+from sklearn.metrics import accuracy_score
+print(f'Accuracy score: {accuracy_score(y_train_5, y_train_90_precision):.4f}')
+print(f'Precision score: {precision_score(y_train_5, y_train_90_precision):.4f}')
+print(f'Recall score: {recall_score(y_train_5, y_train_90_precision):.4f}')
+print(f'F1 score: {f1_score(y_train_5, y_train_90_precision):.4f}')
+```
+
+```{python}
+## ROC AUC
+
+from sklearn.metrics import roc_auc_score, roc_curve
+
+print(f'AUC score: {roc_auc_score(y_train_5, y_scores):.4f}')       
+```
+
+
+```{python}
+## ROC Curve
+
+fpr, tpr, thresholds = roc_curve(y_train_5, y_scores)
+idx_threshold_90_precision = (thresholds<=threshold_90_precision).argmax()      # thresholds listed decreasing => use (<=)
+fpr_90, tpr_90 = fpr[idx_threshold_90_precision], tpr[idx_threshold_90_precision]
+
+plt.plot(fpr, tpr, label='ROC Curve', color='darkslateblue')
+plt.plot([fpr_90], [tpr_90], 'o', label='Threshold for 90% precision', color='crimson')
+plt.title('ROC Curve')
+plt.xlabel('False Positive Rate (Fall-out)')
+plt.ylabel('True Positive Rate (Recall)')
+plt.legend(loc='center right')
+plt.grid()
+
+plt.show()
+```
+
+::: {.callout-important}
+Another trade-off: The higher TPR, the lower FPR and vice versa
+:::
+
+### Logistic Regression
+
+```{python}
+from sklearn.linear_model import LogisticRegression
+
+logistic = LogisticRegression(random_state=29)
+
+y_pred_logis = cross_val_predict(logistic, X_train, y_train_5, cv=3, method='predict_proba')[:,1]
+```
+
+```{python}
+## Measure performance
+
+threshold = 0.5
+f1_logis = f1_score(y_train_5, y_pred_logis>=threshold)
+auc_logis = roc_auc_score(y_train_5, y_pred_logis>=threshold)
+
+print(f'F1 score Random Forest: {f1_logis:.4f}')
+print(f'AUC Random Forest: {auc_logis:.4f}')
+```
+
+### Random Forest
+
+```{python}
+from sklearn.ensemble import RandomForestClassifier
+
+rf_clf = RandomForestClassifier(random_state=42)
+
+y_train_pred_rf = cross_val_predict(rf_clf, X_train, y_train_5, cv=3, method='predict_proba')[:,1]
+```
+
+```{python}
+## Measure performance
+
+threshold = 0.5
+f1_rf = f1_score(y_train_5, y_train_pred_rf>=threshold)
+auc_rf = roc_auc_score(y_train_5, y_train_pred_rf>=threshold)
+
+print(f'F1 score Random Forest: {f1_rf:.4f}')
+print(f'AUC Random Forest: {auc_rf:.4f}')
+```
+
+```{python}
+## PR Curve
+
+precisions_rf, recalls_rf, thresholds_rf = precision_recall_curve(y_train_5, y_train_pred_rf)
+
+plt.plot(recalls, precisions, "-", label='SGD')
+plt.plot(recalls_rf, precisions_rf, label='Random Forest')
+plt.title('Precision versus Recall')
+plt.xlabel('Recall')
+plt.ylabel('Precision')
+plt.legend()
+plt.grid()
+
+plt.show()
+```
+
+```{python}
+## ROC Curve
+
+fpr_rf, tpr_rf, thresholds = roc_curve(y_train_5, y_train_pred_rf)
+
+plt.plot(fpr, tpr, label='SGD', color='darkslateblue')
+plt.plot(fpr_rf, tpr_rf, label='Random Forest', color='crimson')
+plt.title('ROC Curve')
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.legend()
+plt.grid()
+
+plt.show()
+```
+
+
+## Multiclass Classification
+
+- LogisticRegression, RandomForestClassifier, GaussianNB: *natively* handle Multiclass Classification
+
+- SGDClassifier and SVC: *strictly* binary classifiers
+    - `ovo`: one versus one strategy, preferred with scale poorly algorithms (i.e. SVC)
+    - `ovr`: one versus rest strategy, preferred for almost algorithms
+
+
+### SVC
+
+#### Default: ovo strategy
+
+```{python}
+from sklearn.svm import SVC
+
+svc_clf = SVC(random_state=42)
+svc_clf.fit(X_train[:1000], y_train[:1000])
+svc_clf.predict([some_digit])
+```
+
+```{python}
+## Scores from decision_function
+
+some_digit_svc = svc_clf.decision_function([some_digit])
+some_digit_svc.round(4)
+```
+
+```{python}
+## Class of highest score
+
+idx_svc = some_digit_svc.argmax()
+idx_svc
+```
+
+```{python}
+## Classes of prediction
+svc_clf.classes_[idx_svc]
+```
+
+#### Force: ovr strategy
+
+```{python}
+## Train model
+
+from sklearn.multiclass import OneVsRestClassifier
+
+ovr_svc_clf = OneVsRestClassifier(SVC(random_state=42))
+ovr_svc_clf.fit(X[:1000], y_train[:1000])
+ovr_svc_clf.predict([some_digit])
+```
+
+```{python}
+## Compute scores
+
+some_digit_ovr_svc = ovr_svc_clf.decision_function([some_digit])
+some_digit_ovr_svc.round(4)
+```
+
+```{python}
+## Class of hishest score
+
+some_digit_ovr_svc.argmax()
+```
+
+```{python}
+## Extract classes
+
+ovr_svc_clf.classes_
+```
+
+
+### SGD
+
+```{python}
+## Train model
+
+from sklearn.linear_model import SGDClassifier
+
+sgd_clf = SGDClassifier(random_state=42)
+sgd_clf.fit(X_train, y_train)
+sgd_clf.predict([some_digit])
+```
+
+That's incorrect. As we can see,The Classifier is not very confident about its prediction. 
+
+```{python}
+## Compute scores
+
+sgd_clf.decision_function([some_digit])
+```
+
+We will use cross validation to evaluate our model
+
+```{python}
+cross_val_score(sgd_clf, X_train, y_train, cv=3, scoring='accuracy')
+```
+
+We can scale the data to get better result
+
+```{python}
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train.astype('float64'))
+cross_val_score(sgd_clf, X_train_scaled, y_train, cv=3, scoring='accuracy')
+```
+
+Let's look at the confusion matrix of our prediction
+
+```{python}
+## Predict using cross_val_predict
+
+from sklearn.metrics import ConfusionMatrixDisplay
+
+y_train_pred = cross_val_predict(sgd_clf, X_train_scaled, y_train, cv=3)
+```
+
+Confusion matrix with (right) and without (left) normalization.
+
+```{python}
+fig,ax = plt.subplots(1,2,figsize=(9, 4))
+
+ConfusionMatrixDisplay.from_predictions(y_train, y_train_pred, ax=ax[0])
+ax[0].set_title("Confusion matrix")
+ConfusionMatrixDisplay.from_predictions(y_train, y_train_pred, ax=ax[1], normalize='true', values_format='.0%')
+ax[1].set_title("CM normalized by row")
+
+plt.show()
+```
+
+In row #5 and column #8 on the left plot, it's means 10% of true 5s is misclassified as 8s. Kinda hard to see the errors made by model. Therefore, we will put 0 weight on correct prediction (error plot).
+
+Confustion matrix with error normalized by row (left) and by column (right) (normalize=['true','pred'])
+
+```{python}
+fig,ax = plt.subplots(1,2,figsize=(9, 4))
+
+sample_weight = (y_train != y_train_pred)
+
+ConfusionMatrixDisplay.from_predictions(y_train, y_train_pred, ax=ax[0],sample_weight=sample_weight, normalize='true', values_format='.0%')
+ax[0].set_title("Confusion matrix")
+ConfusionMatrixDisplay.from_predictions(y_train, y_train_pred, ax=ax[1],sample_weight=sample_weight, normalize='pred', values_format='.0%')
+ax[1].set_title("CM normalized by row")
+
+plt.show()
+```
+
+In row #5 and column #8 on the left plot, it's means 55% of errors made on true 5s is misclassified as 8s.
+
+In row #5 and column #8 on the right plot, it's means 19% of misclassified 8s are actually 5s.
+
+Analyzing the made errors can help us gain insights and why the classifier failing
+
+
+
+## Multilabel Classification
+
+Output is multilabel for each instances. For example, we will classify whether the digit is large (>7) and is odd
+
+### K Nearest Neighbors
+
+```{python}
+## Train model
+
+import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
+
+y_train_large = (y_train >= '7')
+y_train_odd = (y_train.astype('int8') % 2 == 1)
+y_train_multilabel = np.c_[y_train_large, y_train_odd]
+
+knn = KNeighborsClassifier()
+knn.fit(X_train_scaled, y_train_multilabel)
+knn.predict([some_digit])
+```
+
+Compute average F1 score across all labels (equally important)
+
+```{python}
+## Evaluate model
+
+y_train_pred_knn = cross_val_predict(knn, X_train_scaled, y_train, cv=3)
+f1_score(y_train, y_train_pred_knn, average='macro')
+```
+
+Another approach is to give each label a weight equal to its number of instances
+
+```{python}
+f1_score(y_train, y_train_pred_knn, average='weighted')
+```
+
+
+### SVC
+
+- SVC does not natively support multilabel classification. Therefore, there are 2 strategies:
+1. Train one model per label. It turns out that it's hard to capture the dependencies between labels
+2. Train models sequentially (ChainClassifier): using input features and all predictions of previous models in the chain
+
+```{python}
+from sklearn.multioutput import ClassifierChain
+
+chain_clf = ClassifierChain(SVC(), cv=3, random_state=42)
+chain_clf.fit(X_train_scaled[:2000], y_train_multilabel[:2000])
+chain_clf.predict([some_digit])
+```
+
+
+
+## Multioutput Classification
+
+- Multiclass-multilabel classification
+- For example, we will build a model that removes noise from an digit image
+- Output is a clean image 28x28: multilabel (one label per pixel) and multiclass (pixel intensity range from 0-255 per label)
+
+```{python}
+## Create a noisy train set
+
+np.random.seed(42)
+
+noise = np.random.randint(0,100,(len(X_train), 28*28))
+X_train_noise = X_train + noise
+y_train_noise = X_train
+
+noise = np.random.randint(0,100,(len(X_test), 28*28))
+X_test_noise = X_test + noise
+y_test_noise = X_test
+```
+
+Let's look at sample images
+```{python}
+plt.subplot(1,2,1)
+plot_digit(X_train_noise[0])
+plt.subplot(1,2,2)
+plot_digit(y_train_noise[0])
+
+plt.show()
+```
+
+```{python}
+knn.fit(X_train_noise, y_train_noise)
+y_pred_noise = knn.predict([X_train_noise[0]])
+plot_digit(y_pred_noise)
+```

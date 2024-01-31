@@ -1,0 +1,278 @@
+# Hands-on regression {#sec-regression}
+
+::: {.callout-tip collapse="true"}
+## Main Steps
+1. Look at the big picture.
+2. Get the data.
+3. Explore and visualize the data to gain insights.
+4. Prepare the data for machine learning algorithms. 
+5. Select a model and train it.
+6. Fine-tune model.
+7. Present solution.
+8. Launch, monitor, and maintain system.
+:::
+
+
+
+## Datasets
+
+**Popular open data repositories**
+
+- https://openml.org/  
+- https://Kaggle.com
+- https://PapersWithCode.com  
+- [UC Irvine Machine Learning Repository — Amazon’s AWS datasets](https://archive.ics.uci.edu/)
+- [TensorFlow datasets](https://www.tensorflow.org/datasets?hl=vi)
+
+**Meta portals (they list open data repositories)**
+
+- https://DataPortals.org  
+- https://OpenDataMonitor.eu
+
+**Other pages listing many popular open data repositories**
+
+- [Wikipedia’s list of machine learning datasets](https://en.wikipedia.org/wiki/- List_of_datasets_for_machine-learning_research)
+- https://Quora.com
+- [The datasets subreddit](https://www.reddit.com/r/datasets/)
+
+In this chapter we’ll use the California Housing Prices dataset from the StatLib repository. This dataset is based on data from the 1990 California census. It is not exactly recent but it has many qualities for learning.
+
+
+## Look at the big picture
+
+**Questions**
+
+1. Business objective? Current solution (if any)?
+2. How to use and benefit from the model? 
+3. Data Pipelines?
+4. Determine kind of model
+5. Select preformance measures
+6. Check the Assumptions
+
+
+**Answers**
+
+- Predict median housing price in any district. The results are used for another ML system for investment analysis. The current solution is to gather up-to-date information about a district, or to estimate manually using complex rules if no information.
+- The current solution is costly and time-consuming, and it was often off by more than 30%. Therefore, a ML model could be more useful
+- Data pipelines: A sequence of data processing components. Pipelines are very common in machine learning systems, since there is a lot of data to manipulate and many data transformations to apply.
+- This is a regression task (labeled data), batch learning (data is quite small and not change too much) and model-based learning
+- Metrics for regression:
+
+::: {.callout-note collapse="true"}
+## Expand to learn more about metrics
+Both the RMSE and the MAE are ways to measure the distance between two vectors: the vector of predictions and the vector of target values. Various distance measures, or norms, are possible:\
+• Computing the root of a sum of squares (RMSE) corresponds to the Euclidean norm: this is the notion of distance we are all familiar with. It is also called the l2 norm, noted |·|₂ (or just |·|).\
+• Computing the sum of absolutes (MAE) corresponds to the l1 norm, noted |·|₁. This is sometimes called the Manhattan norm because it measures the distance between two points in a city if you can only travel along orthogonal city blocks.\
+• More generally, the lk norm of a vector v containing n elements is defined as ∥v∥k = (|v₁|ᵏ + |v₂|ᵏ + ... + |vₙ|ᵏ)¹/ᵏ. l0 gives the number of nonzero elements in the vector, and l∞ gives the maximum absolute value in the vector.\
+The higher the norm index, the more it focuses on large values and neglects small ones. This is why the RMSE is more sensitive to outliers than the MAE. But when outliers are exponentially rare (like in a bell-shaped curve), the RMSE performs very well and is generally preferred.
+![L1 norm and L2 norm](images/l1_l2.png){#fig-l1-l2}
+:::
+
+RMSE (root mean squared error): l2 norm\
+$$
+RMSE(X, y)  = \sqrt{\frac{1}{m}\sum_{i=1}^{m}(y_{hat}^{(i)} - y^{(i)})^2}
+$$
+
+MAE (mean squared error): l1 norm\
+$$
+MAE(X, y)  = \frac{1}{m}\sum_{i=1}^{m}|y_{hat}^{(i)} - y^{(i)}|
+$$
+
+- Check with the team in charge of the downstream system that use out output whether it is suitable or not (e.g. it is terrible if after several months building model you realize that they need ordinal output not numerical one)
+
+
+## Get the Data
+
+### Download Data
+
+```{python}
+## Load data
+
+from pathlib import Path
+import pandas as pd
+import tarfile
+import urllib.request
+
+def load_data(url):
+	path = Path("datasets/housing.tgz")
+	if not path.is_file():
+		Path("datasets").mkdir(parents=True, exist_ok=True)
+		urllib.request.urlretrieve(url, path)
+		tarfile.open(path).extractall(path='datasets')
+	return pd.read_csv('datasets/housing/housing.csv')
+
+url = 'https://github.com/ageron/data/raw/main/housing.tgz'
+data = load_data(url)
+```
+
+### Quick Look to Data Structure: head(), info(), describe(), value_counts(), histplot()
+
+```{python}
+## Quick look
+
+pd.set_option('display.max_columns', None)		# display all columns
+data.head()
+```
+
+There are total 10 features, each row represents a district observation
+
+```{python}
+data.info()
+```
+
+Data with 10 columns and 20640 rows
+9 numerical features, 1 categorical feature
+'total_bedrooms' has only 20433 non-null values
+
+```{python}
+data.describe(include='all')		# describe all type of data
+```
+
+```{python}
+for ft in data.select_dtypes('object'):		# choose 'object' features only
+	print(data[ft].value_counts())
+	print(f'Number of classes: {data[ft].nunique()}')
+```
+
+Quite imbalanced classes
+
+```{python}
+## Plot histogram of numerical features
+
+import matplotlib.pyplot as plt
+
+data.hist(bins=50, figsize=(8,8))
+plt.show()
+```
+
+*housing_median_age*: capped at range (1,52)\
+*median_income*: scaled and capped at range ~ (0.5, 15)\
+*median_house_value*: capped at top range of 500,000\
+These features are `skewed` and have very `different scales` => Transforming and Feature Scaling
+
+
+### Create train, val and test set: train_test_split()
+`random sampling`: data must be large enough, otherwise there is a risk of sampling bias
+`stratified sampling`: based on some very important features, help avoid *bias* and ensure train set and test set are *representative* to full dataset
+
+*Here we assump that median_income is very important feature to predict household value*
+
+```{python}
+## Create new feature (income group)
+import numpy as np
+
+data['income_grp'] = pd.cut(data['median_income'], bins=[0,1.5,3,4.5,6,np.inf], labels=[1,2,3,4,5])
+
+data.income_grp.value_counts().sort_index().plot.bar(rot=0, grid=True)
+plt.title('Frequency of income group')
+plt.xlabel('Income group')
+plt.ylabel('Frequency')
+plt.show()
+```
+
+```{python}
+## Split data into train, val, test set
+
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(data.drop('median_house_value', axis=1), data.median_house_value, stratify=data['income_grp'], test_size=0.2, random_state=24)
+```
+
+```{python}
+## Drop the 'income_grp' after using
+
+for df in [x_train, x_test]:
+	df.drop('income_grp', axis=1, inplace=True)
+```
+
+
+## Explore and visualize the data to gain insights
+
+If the data is very large, we will sample an exploration set to manipulate faster and easier. On the other hand, just work directly on full set if the data is quite small
+
+```{python}
+df_vis = data.copy()
+```
+
+### Visualize
+
+**Plot**
+
+```{python}
+#| label: fig-geoplot
+#| fig-cap: 'The geographical plot of data'
+#| echo: false
+#| fig-align: center
+#| fig-width: 2
+
+df_vis.plot.scatter(x='longitude', y='latitude', 
+s=df_vis['population']/100, label='population', c='median_house_value', 
+cmap='jet', colorbar=True, legend=True, figsize=(6,6))
+# plt.title('The geographical plot of data')
+plt.grid()
+
+plt.show()
+```
+
+Large point size: larger population
+Blue -> red: higher house price
+
+**Correlation**
+
+There are 2 ways to perform: heatmap and pairgrid map
+
+```{python}
+#| label: fig-corr
+#| fig-cap: 'Correlation Plot'
+#| echo: false
+#| fig-align: center
+#| fig-width: 2
+
+## Heatmap
+
+import seaborn as sns
+
+corr_matrix = df_vis.corr(numeric_only=True)
+sns.heatmap(corr_matrix, annot=True, fmt='.2f')
+```
+
+```{python}
+#| label: fig-pairgrid
+#| fig-cap: 'PairGrid Plot of numerical features'
+#| echo: false
+#| fig-align: center
+#| fig-width: 1
+
+sns.set(rc={'figure.figsize':(8,6)})
+g = sns.PairGrid(df_vis[["median_house_value", "median_income", "total_rooms", "housing_median_age"]])		# plot some high correlated features
+g.map_diag(sns.histplot, bins=10)
+g.map_offdiag(sns.scatterplot, alpha=0.2)
+```
+
+*Try pd.plotting.scatter_matrix*
+
+Look closely too the relation between 'median_house_value' and 'median_income', we see there is a strong positive correlation, but there are some clearly horizontal line at 500,000; 450,000; 350,000 and roughly 280,000. We should remove these instances to prevent the algorithms learning these patterns.
+
+```{python}
+#| label: fig-corr2
+#| fig-cap: 'Median income versus median house value'
+#| echo: false
+#| fig-align: center
+
+df_vis.plot(kind='scatter', x='median_income', y='median_house_value', grid=True, figsize=(8,6))
+
+plt.show()
+```
+
+
+### Attributes combination
+
+Useful when we want to find better features to predict
+
+```{python}
+df_vis['room_per_house'] = df_vis['total_rooms']/df_vis['households']
+df_vis['bedroom_ratio'] = df_vis['total_bedrooms']/df_vis['total_rooms']
+df_vis['people_per_house'] = df_vis['population']/df_vis['households']
+
+corr_matrix = df_vis.corr(numeric_only=True)
+corr_matrix['median_house_value'].sort_values(ascending=False)
+```

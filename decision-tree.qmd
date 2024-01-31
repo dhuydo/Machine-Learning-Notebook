@@ -1,0 +1,205 @@
+# Decision Tree {#sec-decision-tree}
+
+
+
+Decision trees are versatile machine learning algorithms that can perform both classification and regression tasks, and even multioutput tasks. It works by recursively partitioning the data into subsets based on **statements** of features, making decisions whether or not the statement is **True** or **False**.
+
+
+::: {.callout-note collapse="true"}
+## Important notes to remember
+- Handle both numerical and categorical data.\
+- Do not require feature scaling.\
+- The algorithm selects the best feature at each decision point, aiming to maximize information gain (for classification) or variance reduction (for regression). Decision trees are interpretable, easy to visualize, and can handle both numerical and categorical data. However, they may be prone to overfitting, which can be addressed using techniques like pruning.\
+- Ensemble methods, such as Random Forests and Gradient Boosting, often use multiple decision trees to enhance predictive performance and address the limitations of individual trees.\
+- Decision Tree *(white box model, interpretable ML)* vs Random Forest, NNs *(black box model)*
+
+- Some DT algorithm:
+	- ID3, C4.5 (Information Gain/ Information Gain Ratio)\
+	- CART (Gini Index)\
+	- SLIQ, SPRINT (Gini Index)\
+:::
+
+
+
+### Training and Visualizing
+
+```{python}
+## Train a decision tree
+
+from sklearn.datasets import load_iris
+from sklearn.tree import DecisionTreeClassifier
+
+iris = load_iris(as_frame=True)
+X_iris = iris.data[["petal length (cm)", "petal width (cm)"]].values
+y_iris = iris.target
+some_flower = X_train[100,:]
+
+dt_clf = DecisionTreeClassifier(max_depth=2, random_state=29)
+dt_clf.fit(X_iris, y_iris)
+print(dt_clf.predict([some_flower]))
+print(dt_clf.predict_proba([some_flower]))
+```
+
+![Decsion tree decision boudaries](images/decision-tree1.png){#fig-decision-tree}
+
+```{python}
+## Plot a decision tree
+
+from sklearn.tree import plot_tree
+
+plot_tree(dt_clf, feature_names=["petal length (cm)", "petal width (cm)"], class_names=iris.target_names)
+```
+
+![Decision tree](images/decision-tree.png){#fig-decision-tree}
+
+The structure of a decision tree:
+
+1. Root node: depth 0, at top
+2. Branch nodes: split data based on statements
+3. Leaf nodes: output, no child nodes 
+
+@fig-decision-tree, in a node:\
+- Samples: count instances in that node\
+- Value: count instances of each class\
+- Gini (Gini impurity): a measurement, measure a node is pure (0) or not (-> 1)
+$$G_{i}=1-\sum_{k=1}^{n}p_{i,k}^{2}$$
+
+	Gi: Gini impurity of node i\
+	pi,k: probability of `class k instances` in total instances in node `i`
+
+**Other measurements**:
+
+- Entropy (Entropy impurity) : measure randomness or uncertainty
+$$H_{i} = -∑ p_{i,k}log_2(p_{i,k})$$
+
+- Information Gain = (Entropy before split) - (weighted entropy after split)\
+- Information Gain Ratio = Information Gain / SplitInfo\
+- SplitInfo (Split Information): potential worth of splitting a branch from a node
+$$SplitInfo(A) = -∑ p_{k}log_2(p_{k})$$
+
+::: {.callout-note}
+Example:\
+Gi = 1 – (0/54)2 – (49/54)2 – (5/54)2 ≈ 0.168\
+Hi = –(49/54) log2 (49/54) – (5/54) log2 (5/54) ≈ 0.445
+:::
+
+
+- Use cases:
+- `Gini` and `Entropy`: No big difference
+- `Gini` is faster => good default
+- `Gini`: isolate the most frequent class in its own branch
+- `Entropy`: produce slightly more balanced trees
+- `Information Gain` tends to prefer attributes that create many branches (e.g. 12 instances with 12 classes => Entropy = 0)
+- `Information Gain Ratio`: regularize Information Gain
+- Sometimes, attribute A is chosen because its Information Gain Ratio is really low => Set Information Gain threshold
+
+
+### CART algorithm
+
+- sklearn use *CART* algorithm produce *binary tree* (2 children only)
+- Other algorithms such as *ID3* have 2 or more children
+- Algorithm choose *feature k* and *threshold tk* producing purest subsets, weighted by their sizes. CART cost function for `classification`:
+
+$$
+J_{k, t_k} = \frac{m_{left}}{m} G_{left} + \frac{m_{right}}{m}G_{right}
+$$
+
+- G: impurity\
+- m: number of instances
+
+- CART split training set recursively until: *purest*, *max_depth*, *min_samples_split*, *min_samples_leaf*, *min_weight_fraction_leaf*, and *max_leaf_nodes*. 
+ - Find optimal tree is `NP-complete problem`, **O(exp(m))** => Have to find 'resonably good' solution when training a decision tree
+ - But making predictions is just **O(log2(m))**
+
+
+::: {.callout-tip collapse="true"}
+### NP-complete problem
+P is the set of problems that can be solved in `polynomial time` (i.e., a polynomial of the dataset > size). NP is the set of problems whose solutions can be verified in polynomial time. An `NP-hard` problem is a problem that can be reduced to a known NP-hard problem in polynomial time. An `NP-complete` problem is both NP and NP-hard. A major open mathematical question is whether or not P = NP. If P ≠ NP (which seems likely), then no polynomial algorithm will ever be found for any NP-complete problem (except perhaps one day on a quantum computer).
+:::
+
+
+
+## Regularization
+
+- Parametric model (Linear Regression): predetermined parameters => degree of freedom is limited => reducing the risk of overfitting
+- Non-parametric model: parameters not determined prior to training => go freely => overfitting => **regularization**
+- Increasing `min_*` hyperparameters or reducing `max_*` hyperparameters will **regularize** the model:
+	- max_depth, max_features, max_leaf_nodes
+	- min_samples_split, min_samples_leaf, min_weight_fraction_leaf
+
+```{python}
+from sklearn.datasets import make_moons
+
+X_moons, y_moons = make_moons(n_samples=150, noise=0.2, random_state=42)
+
+dt_clf1 = DecisionTreeClassifier(random_state=29)
+dt_clf2 = DecisionTreeClassifier(max_depth=5, min_samples_leaf=5, random_state=29)
+dt_clf1.fit(X_moons, y_moons)
+dt_clf2.fit(X_moons, y_moons)
+
+X_moons_test, y_moons_test = make_moons(n_samples=1000, noise=0.2, random_state=43)
+
+print(f'Non-regularized decision tree: {dt_clf1.score(X_moons_test, y_moons_test):.4f}')
+print(f'Regularized decision tree: {dt_clf2.score(X_moons_test, y_moons_test):.4f}')
+```
+
+![Decision boudaries of unregularized tree (left) and regularized tree (right)](images/regularized-decision-tree.png){#fig-regularized-decision-tree}
+
+::: {.callout-important}
+## Pruning Trees
+- Pruning: deleting unnecessary nodes\
+- Algorithms work by first training the decision tree without restrictions, then pruning (deleting) unnecessary nodes. A node whose children are all leaf nodes is considered unnecessary if the purity improvement it provides is not statistically significant. Standard statistical tests, such as the χ2 test (chi-squared test), are used to estimate the probability that the improvement is purely the result of chance (which is called the null hypothesis). If this probability, called the p-value, is higher than a given threshold (typically 5%, controlled by a hyperparameter), then the node is considered unnecessary and its children are deleted. The pruning continues until all unnecessary nodes have been pruned.\
+- There are 3 types of Pruning Trees\
+    - Pre-Tuning
+    - Post-Tuning
+    - Combines
+:::
+
+
+
+## Regression
+
+- *DecisionTreeRegressor* splits each region in a way that makes most training instances `as close as possible` to that predicted value (average of instances in the region)
+- CART cost function for `regression`:
+$$
+J_{k, t_k} = \frac{m_{left}}{m} MSE_{left} + \frac{m_{right}}{m} MSE_{right}
+$$
+
+- MSE: mean squared error
+- m: number of instances
+
+```{python}
+import numpy as np
+from sklearn.tree import DecisionTreeRegressor
+
+np.random.seed(42)
+X_quad = np.random.rand(200, 1) - 0.5
+y_quad = X_quad ** 2 + 0.025 * np.random.randn(200, 1)
+
+dt_reg = DecisionTreeRegressor(max_depth=2, min_samples_leaf=5, random_state=29)
+dt_reg.fit(X_quad, y_quad)
+
+plot_tree(dt_reg)
+```
+
+If we set *max_depth* larger, the model will predict more strictly. As same as @fig-different-max-depth, if we keep the default hypeparameters, the model will grow as much as it can @fig-regularized-tree.
+
+![Different max_depth](images/different-max-depth.png){#fig-different-max-depth}
+
+![Unregularized tree (left) and regularized tree (right](images/regularized-tree.png){#fig-regularized-tree}
+
+
+## Limitations of Decision Tree
+
+- Decision tree tends to make `orthogonal` decision boudaries.\ => Sensitive to the data’s orientation.
+
+![Decision tree is sensitive to data's orientation](images/orientation.png){#fig-orientation}
+
+=> **Solution**: Scale data -> PCA: reduce dimensions but do not loss too much information, rotate data to reduce correlation between features, which often (not always) makes things easier for trees.
+
+Compare to @fig-decision-tree, the scaled and PCA-rotated iris dataset is separated easier.
+
+![Scaled and PCA-rotated data](images/scaled-decision-tree.png){#fig-scaled-decision-tree}
+
+- High variance: **randomly** select set of features to evaluate at each node, so that if we retrain model on the same dataset, it can behave really different => high variance, unstable\
+=> **Solution**: Ensemble methods (Random Forest, Boosting methods) averaging predictions over many trees.

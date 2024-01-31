@@ -1,0 +1,18 @@
+# Metrics and scoring {#sec-metrics}
+
+
+
+## Sklearn documents
+
+[sklearn.metrics](https://scikit-learn.org/stable/modules/model_evaluation.html)
+
+
+## Classification
+
+### Accuracy
+- accuracy(y_true, y_pred)
+- Proportion of exact match prediction of the model
+- As this [case](hands-on-classification.qmd#evaluate-model), the result showed that with the presence of class immbalance, accuracy score is not useful metric
+
+### Confusion matrix
+- nsdf nnsf

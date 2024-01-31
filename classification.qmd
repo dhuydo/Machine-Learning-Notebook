@@ -1,0 +1,144 @@
+# Classification {#sec-classification}
+
+Classification is a *supervised learning* problem whose output are categorical, different from @sec-regression of which are numerical. 
+
+The algorithms used to handle classification problems are divided into the following groups: Binary classification, multiclass classification, multilabel classification, multioutput classification, etc.
+
+
+## Binary Classification
+
+### Logistic Regression 
+
+Pretty much same as method using in [Linear regression](regression.qmd#linear-regression), Logistic regression use *sigmoid function* to the same equation using in Linear regression to turn the output into probabilities (range (0,1)).
+
+$$
+\begin{gather}
+Linear Regression: y = θ^{T}X\\
+Logistic Regression: p = sigmoid(θ^{T}X)\\
+sigmoid(t) = \frac{1}{1-e^{-t}}\\
+logit(p) = log\left(\frac{p}{1-p}\right)= t
+\end{gather}
+$$
+
+Cost function for 1 instance
+$$\begin{equation}
+\begin{split}
+J(θ) & = -log(p)\quad \quad \quad if\;\;\; y=1\\
+ & = -log(1-p) \quad \; if\;\;\;  y=0
+\end{split}
+\end{equation}
+$$
+
+::: {.callout-note}
+Cost function penalizes the model when it estimates the loew probability for the real target class
+
+- -log(p) -> inf when p -> 0 for y = 1 instance\
+- -log(1-p) -> inf when p -> 1 for y = 0 instance
+:::
+
+There is no closed-form equation to compute θ. We will use gradient descent to find the best weights.
+
+Cost function for whole training set (log loss): *convex function*
+$$J(θ) = \frac{−1}{m} \sum [y_ilog(p_i) + (1−y_i)log(1−p_i)]$$
+
+Gradient
+$$∇ = \frac{1}{m}X^{T}[sigmoid(Xθ) - y]$$
+
+::: {.callout-important}
+- Log loss `assumption`: the instances follow a Gaussian distribution around the mean of their class\
+- MSE `assumption`: data is purely linear\
+- The more wrong `assumption`, the more `biased` the model
+:::
+
+Decision boudaries: 
+
+
+::: {.callout-tip}
+Regularization in Logistic Regression: l1, l2 using C parameter (inverse of alpha)
+:::
+
+Implement Linear regression using sklearn: [Logistic regression](hands-on-classification.qmd#logistic-regression)
+
+
+### Softmax Regression (Multinomial Logistic Regression)
+
+The Logistic regression can be generalized to support multipleclass classification directly. It is called *softmax regression*. 
+
+The strategy when given an instance x is described like this:
+
+1. Compute score for each class using *softmax score function*
+2. Compute probability for each class using *softmax function* to each score
+3. Choose the class with the highest probability. The instance x is belong to this class
+
+Softmax score for class k
+$$s_k(x) = (θ^{(k)})^{T}X$$
+
+::: {.callout-note}
+Each class has own parameter vecto θ(k). *Parameter matrix Θ* contains all parameter vectors of all classes
+:::
+
+Softmax function for class k: 
+$$p_k = σ(s(x))_k = \frac{exp(s_k(x))}{\sum\limits exp(s_j(x))}$$
+
+- K is the number of classes\
+- s(x) is a vector containing the scores of each class for the instance x\
+- σ(s(x))k is the estimated probability that the instance x belongs to class k, given the scores of each class for that instance\
+
+Choose the class with the highest probability
+$$y= argmax\; σ(s(x))_k= argmax\;s_k(x) = argmax\; (θ^{k})^{T}X$$
+
+Just like Logistic regression, softmax regression has the cost function called `Cross entropy`
+
+Cross entropy cost function
+
+$$
+J(Θ) = −\frac{1}{m}\sum_{i=1}^{m}\sum_{k=1}^{K}y_{k}^{(i)}log(p_{k}^{(i)})
+$$
+
+::: {.callout-note}
+- yk(i): the label of the target class\
+- When k=2, softmax regression is equivalent to logistic regression
+:::
+
+Cross entropy gradient vector for class k
+
+$$
+∇_{θ}k = \frac{1}{m}\sum(p_{k}^{(i)} − y_{k}^{i})x^{(i)}
+$$
+
+Implement Linear regression using sklearn
+
+```{python}
+from sklearn.datasets import load_iris
+
+iris = load_iris(as_frame=True)
+iris.target_names
+```
+
+```{python}
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
+
+X = iris.data[["petal length (cm)", "petal width (cm)"]].values
+y = iris["target"]
+X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
+
+softmax = LogisticRegression(max_iter=1000, C=30)
+softmax.fit(X_train, y_train)
+print(softmax.predict([X_test[0]]))
+print(softmax.predict_proba([X_test[0]]).round(4))
+```
+
+
+## Multiclass Classification
+
+
+
+## Multilabel Classification
+
+
+
+## Multioutput Classification
+
+
+

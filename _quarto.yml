@@ -1,0 +1,50 @@
+project:
+  type: book
+
+
+book:
+  title: "Machine Learning Notebook"
+  author: "Nguyen Cao Duc Huy"
+  date: "1/20/2024"
+  page-footer:
+    left:
+      Machine Learning Notebook was written by Nguyen Cao Duc Huy
+  sidebar:
+    logo: images/cover2.png
+  chapters:
+    - index.qmd
+    - landscape.qmd
+    - project-checklist.qmd
+    - regression.qmd
+    - gradient-descent.qmd
+    - hands-on-regression.qmd
+    - classification.qmd
+    - hands-on-classification.qmd
+    - svm.qmd
+    - decision-tree.qmd
+    - dim-reduction.qmd
+    - part: Appendix
+      chapters: 
+        - metrics.qmd
+    
+      
+
+bibliography: references.bib
+
+format:
+  html:
+    theme:
+      light: cosmo
+      dark: darkly
+    author-meta: "Nguyen Cao Duc Huy"
+    callout-appearance: simple
+  pdf:
+    documentclass: scrreport
+  epub:
+    cover-image: cover.png
+
+editor: visual
+
+jupyter: dhuy
+
+

@@ -1,0 +1,526 @@
+# Regression {#sec-regression}
+
+
+
+## Linear Regression
+
+Suppose that we have a data set of demographic and healthcare cost for each individual in a city, and we want to predict the total healthcare cost based on age.
+
+If we use linear regression method for this task, we will assump that the relationship between these features is *linear* and try to fit a `line` so that is closest to the data. The plot looks like this.
+
+```{python}
+#| code-fold: true
+
+## Simple linear regression plot
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+np.random.seed(29)
+m = 100      # number of instances
+x = np.random.randint(18,80,m)
+y = np.random.randint(-200,200,m) + 20*x
+
+plt.plot(x,y,'b.', label='True values')
+plt.plot(x, 20*x,'-',color='r', label='Linear regression')
+plt.xlabel('Age')
+plt.ylabel('Healthcare cost')
+plt.legend()
+
+plt.show()
+```
+
+If you have another feature using to predict (e.g. weight), the plot will look like this. For ≥3 features, it's called 'Multiple linear regression' and we will fit a `hyperplane` instead.
+
+```{python}
+#| code-fold: true
+
+## Multiple linear regression plot
+
+from sklearn.linear_model import LinearRegression
+import pandas as pd
+from mpl_toolkits.mplot3d import Axes3D
+import warnings
+warnings.filterwarnings("ignore")
+
+z = np.random.randint(20,30,m)
+y = np.random.randint(-200,200,m) + 20*x +30*z
+
+X_train = np.c_[x,z]
+lm = LinearRegression()
+lm.fit(X_train, y)
+
+
+# Setting up the 3D plot
+fig = plt.figure(figsize=(10, 7))
+ax = fig.add_subplot(111, projection='3d')
+
+# Scatter plot of actual data
+ax.scatter(x, z, y, color='blue', marker='o', alpha=0.5, label='True values')
+
+# Creating a meshgrid for the plane
+x_surf = np.linspace(x.min(), x.max(), 100)
+z_surf = np.linspace(z.min(), z.max(), 100)
+x_surf, z_surf = np.meshgrid(x_surf, z_surf)
+
+# Predicting the values from the meshed grid
+vals = pd.DataFrame({'Age': x_surf.ravel(), 'Weight': z_surf.ravel()})
+y_pred = lm.predict(vals)
+ax.plot_surface(x_surf, z_surf, y_pred.reshape(x_surf.shape), color='r', alpha=0.3, label='Hyperplane')
+
+# Labeling the axes
+ax.set_xlabel('Age')
+ax.set_ylabel('Weight')
+ax.set_zlabel('Healthcare cost')
+#ax.legend()
+
+plt.show()
+
+```
+
+The formula of the line (n=1)/hyperplane (n>1) is:
+$$
+\hat{y} = θ_o +θ_1x_1 +θ_2x_2+...+θ_nx_n
+$$
+
+- ŷ: predicted value
+- n: number of features
+- x_i: the i_th feature value
+- θ_i: the i_th parameter value (θ_0: intercept; θ_1 - θ_n: weight of parameters)
+
+For linear algebra, this can be written much more concisely using a vectorized form like this:
+$$\hat{y} = θ.X$$
+
+- θ: vecto of weights (of parameters)
+- X: matrix of features
+
+So how can we find the best fitted line, the left or the right one?
+
+```{python}
+#| code-fold: true
+
+np.random.seed(29)
+m = 100      # number of instances
+x = np.random.randint(18,80,m)
+y = np.random.randint(-200,200,m) + 20*x
+
+plt.subplot(1,2,1)
+plt.plot(x,y,'b.', label='True values')
+plt.plot(x, 20*x,'-',color='r')
+plt.xlabel('Age')
+plt.ylabel('Healthcare cost')
+
+plt.subplot(1,2,2)
+plt.plot(x,y,'b.', label='True values')
+plt.plot(x, 10+18*(x+10),'-',color='r')
+plt.xlabel('Age')
+
+plt.show()
+```
+
+It turns out that we have 2 common strategy:\
+- Linear algebra: using `normal equation`\
+- Optimization: using `gradient descent`
+
+### Normal Equation {#sec-normal-equation}
+
+$$θ = (X^{T}X)^{-1}X^{T}y$$
+
+- θ: vecto of weights (of parameters)
+- X: matrix of features
+- y: vecto of target value
+
+That's all we need to compute the best weights (coefficients). 
+
+But in reality, not all cases matrix is invertible, so `LinearRegression` in `sklearn` compute *pseudoinverse (X+)* instead, using a standard matrix factorization technique called singular value decomposition (SVD) that decompose X into (UΣV^T):
+$$
+\begin{gather}
+θ = X^{+}Y\\
+   X = UΣV^{T}\\
+X^{+} = VΣ^{+}U^{T}
+\end{gather}
+$$
+
+Implement Linear regression using sklearn
+
+```{python}
+from sklearn.linear_model import LinearRegression
+
+np.random.seed(29)
+x = np.random.randint(18,80,m)
+y = np.random.randint(-200,200,m) + 20*x
+X_train = x.reshape(-1,1)
+
+linear = LinearRegression()
+linear.fit(X_train,y)
+y_pred = linear.predict(X_train)
+print(f'Equation: {linear.intercept_:.2f} + {linear.coef_[0]:.2f}*x')
+
+plt.plot(x, y, 'b.', label='True values')
+plt.plot(x, y_pred,'-',color='r', label='Linear regression')
+plt.xlabel('Age')
+plt.ylabel('Healthcare cost')
+plt.legend()
+
+plt.show()
+```
+
+Both the Normal equation and SVD approach scale well with the number of instances, but scale very badly with number of features. Therefore, we will look at another approach which is better suited for cases where there are a large number of features or too many training instances to fit in memory.
+
+
+### Gradient Descent
+
+#### How does GD work?
+
+In fact, the computer really like the term 'optimization', which means we will take the result roughly equal to the correct one with the acceptable error. Gradient descent (GD) is that kind of method.
+
+Generally, GD tweaks the weights iteratively in order to minimize a `cost function`. Steps to do Gradient Descent:
+
+1. Take `Gradient (derivative)` of Loss Function
+2. Random initialization (take random weights)\
+Loop step 3-5 until **converge**:\
+3. Compute gradient
+4. Compute `step size`: StepSize = Gradient * Learning_rate
+5. Compute new weights: New = Old - StepSize
+
+- [i] Run single epoch:
+	- partial_fit(): ignore (*max_iter*, *tol*) do not reset epoch counter
+	- fit(warm_start = True)
+
+::: {.callout-note}
+- Loss function: also called `cost function`, is the amount that we have to pay if we use the specific set of weights. Of course we want to minimize it cause everyone want to pay less but gain more, right 😆
+
+- Learning rate: the pace of changing the weights in respond to the estimated loss\
+    - Too small: take a long time to converge
+    - Too high: diverge
+
+- Number of epochs: times that we update our weights
+    - Too low: can't get optimal solution
+    - Too high: waste time (parameters do not change much)
+    - `Solution`: set large *epoch* and a *tolerance* to interrupt when *grandient* < *tolerance*
+:::
+
+::: {#fig-learning-rates layout-ncol=3} 
+
+![Suitable learning rate](images/learning-rate.png)
+
+![Too low learning rate](images/high-lr.png) 
+
+![Too high learning rate](images/low-lr.png)
+
+Learning rate strategy
+:::
+
+
+#### GD pitfalls
+
+- *Local minimum*: If we initialize weights from the left, we will reach local minimum instead of global minimum
+- *Plateau*: if we initialize weights from the right, the gradient will change slowly and adding new instances to the training set doesn’t make the average error much better or worse. If early stopping, we will never reach the global minimum
+
+![Gradient descent pitfalls](images/gd-pitfalls.png){#fig-gd-pitfalls}
+
+Fortunately, the cost function of linear regression is a *convex function*, which means it has no local minimum/ just one global minimum, and its slope never changes abruptly
+
+$$
+MSE = \frac{1}{2m}\sum_{i=1}^{m}{(θ^{T}x_{i}-y_{i})}^2
+$$
+
+- Another pitfall of GD: features have very different scales. Therefore, when using gradient descent, you should ensure that all features have a similar scale (e.g., using Scikit-Learn’s *StandardScaler* class), or else it will take much longer to converge.
+
+![Gradient descent with (left) and without (right) feature scaling](images/gd-scales.png){#fig-gd-scales.png}
+
+#### Implement gradient descent using sklearn
+
+```{python}
+from sklearn.linear_model import SGDRegressor
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import make_pipeline
+
+sgd = make_pipeline(StandardScaler(),
+SGDRegressor(max_iter=1000, tol=1e-3))
+sgd.fit(X_train, y)
+print('Equation: %.2f + %.2f*x' % (sgd['sgdregressor'].intercept_[0], sgd['sgdregressor'].coef_[0]))
+
+y_pred = sgd.predict(X_train)
+
+plt.plot(x, y, 'b.', label='True values')
+plt.plot(x, y_pred,'-',color='r', label='Stochastic gradient descent regressor')
+plt.xlabel('Age')
+plt.ylabel('Healthcare cost')
+plt.legend()
+
+plt.show()
+```
+
+::: {.callout-warning}
+The intercept and coefficient in this equation are different from @sec-normal-equation because they implement on scaled X_train
+:::
+Learn more about [Gradient descent](gradient-descent.qmd).
+
+
+## Polynomial Regression
+
+If the data is more complex (non linear), what do we do? In that case, we just create new features by adding powers to existed features, and use them to fit to our linear model. This technique is called *polynomial regression*.
+
+For example, we will use sklearn's `PolynomialFeatures` to transform our data to higher degree, and then fit it to `LinearRegression`.
+
+```{python}
+#| code-fold: true
+np.random.seed(29)
+m = 100
+X = 10*np.random.rand(m, 1)-5
+y = 10+ 1.5*X**2 + X + np.random.randn(m,1)
+
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+
+pipe = make_pipeline(PolynomialFeatures(degree=2, include_bias=False), LinearRegression())
+
+pipe.fit(X, y)
+y_pred = pipe.predict(X)
+
+X_new = np.linspace(-5, 5, 100).reshape(-1, 1)
+y_pred_new = pipe.predict(X_new)
+
+plt.plot(X, y, 'b.', label='True values')
+plt.plot(X_new, y_pred_new,'-',color='r', label='Stochastic gradient descent regressor')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.legend()
+
+plt.show()
+```
+
+::: {.callout-tip}
+If we have n features, d degree: `PolynomialFeatures` transform into `(n+d)! / (n!d!)` features
+:::
+
+
+
+## Learning Curve
+
+> How complex polynomial should be?
+
+- Underfitting (1 dgree): too simple model, can't capture the pattern of data
+- Overfitting (300 degrees): too complex model, tend to remember data
+
+![Different polynomial degree](images/different-degrees.png){#fig-different-degrees}
+
+> How can tell overfitting or underfitting? There are 2 strategies
+
+**Cross-validation**\
+- Overfitting: model perform well on train set, generate poorly on validation set\
+- Underfitting: perform poorly on both train and validation sets
+
+**Learning Curve**
+- Plot `training errors` and `validation errors` over training set sizes (using cross-validation)\
+    - Overfitting: *gap* between the curves
+    - Underfitting: *Plateau* (adding more training samples do not help)
+
+> So how do we handle the overfitting/underfitting model?
+
+- Overfitting: Change too simpler model, feeding more training data, constrain the weights of unimportant features\
+- Underfitting: Change to more complex algorithm; better features
+
+::: {.callout-important}
+## Bias-Variation Trade-Off
+
+1. **Bias (underfitting)**: wrong assumptions (e.g. assump linear while quadratic)
+2. **Variation (overfitting)**: remember data (sensitive to variations in data)\
+=> `Trade-Off`: Increase model's complexity will increase variation and decrease bias\
+3. **Irreducible error**: noisiness => clean up data
+:::
+
+
+
+## Regularized Linear Models
+
+As mentioned above, to reduce overfitting we constrain the weights of model. These techniques are called `regularization` including: Ridge regression, Lasso Regression and Elastic net.
+
+::: {.callout-tip}
+- Regularized linear models: Sensitive to the scale \
+=> *StandardScaler* before regularize\
+
+- In almost cases, we should avoid plain Linear regression
+
+- Use case of Regularized linear models:
+1. Elastic Net: when there are few useful features, (features > instances, correlated features => Lasso tends to behave erratically)
+2. Lasso: when there are few useful features
+3. Ridge: good for default (a *warmstart*)
+
+- Find out more about *RidgeCV*, *LassoCV* and *ElasticNetCV*
+:::
+
+@fig-l1-l2
+
+### Ridge Regression
+Add a *regularization term (L2 norm)* to the MSE cost function of Linear regression in order to keep the weights as small as possible
+
+Ridge regression cost function
+$$
+\begin{equation}
+\begin{split}
+J(θ) & = MSE(θ) + \frac{α}{2m}\sum_{i=1}^{m}w_i^2\\
+    & = MSE(θ) + \frac{α}{2m}θ^Τθ
+\end{split}
+\end{equation}
+$$
+
+Closed-form equation
+$$θ = (X^{T}X + αΑ)^{-1}X^{T}Y$$
+
+::: {.callout-tip}
+sklearn.linear_model.Ridge(solver='cholesky')
+:::
+
+```{python}
+from sklearn.linear_model import Ridge
+
+np.random.seed(29)
+m = 50
+X = 3 * np.random.rand(m, 1)
+y = 1 + 0.5 * X + np.random.randn(m, 1) / 1.5
+
+def make_plot(alphas):
+    plt.plot(X, y, 'b.')
+    for alpha, style in zip(alphas, ['b:','r--','g-']):
+        pipe = make_pipeline(PolynomialFeatures(degree=5, include_bias=False), Ridge(alpha=alpha, solver='cholesky'))
+        pipe.fit(X, y)
+        X_new = np.linspace(0, 3, 100).reshape(-1, 1)
+        y_pred_new = pipe.predict(X_new)
+
+        plt.plot(X_new, y_pred_new, style, label='alpha = %s' % alpha)
+    plt.axis([0, 3, 0, 3.5])
+    plt.legend()
+    plt.show()
+
+make_plot([0,0.1,1])
+```
+
+Gradient descent
+$$
+\begin{gather}
+∇ = \frac{1}{m}X^{T}(Xθ - y)+\frac{α}{m}θ\\
+\\
+θ = θ - λ∇\\
+\end{gather}
+$$
+
+These 2 models are equally, in which we have to set the lpha in the SGD to be alpha/m
+
+```{python}
+from sklearn.linear_model import Ridge
+
+alpha = 0.01
+
+ridge = Ridge(alpha=0.1, random_state=29)
+sgd = SGDRegressor(penalty='l2', alpha=0.1/m, random_state=29)
+```
+
+
+
+### Lasso Regression
+
+Add a *regularization term (L1 norm)* to the MSE cost function of Linear regression, but tend to `eliminate` weights of least important features\
+=> Weights is `sparse matrix`
+
+Lasso regression cost function
+$$
+\begin{equation}
+\begin{split}
+J(θ) & = MSE(θ) + α\sum_{i=1}^{m}|w|\\
+    & = MSE(θ) + αθ
+\end{split}
+\end{equation}
+$$
+
+Gradient descent
+
+The L1 regularization is not differentiable at θi = 0, but gradient descent still works if we use a *subgradient vector* g11 instead when any θi = 0. Learn more about [gradient descent for lasso regression](https://www.cs.cmu.edu/afs/cs/project/link-3/lafferty/www/ml-stat2/talks/YondaiKimGLasso-SLIDE-YD.pdf)
+
+These 2 models are equally, and we have to adjust the alpha as same as ridge regression
+
+```{python}
+from sklearn.linear_model import Lasso
+
+alpha = 0.01
+
+ridge = Lasso(alpha=0.1, random_state=29)
+sgd = SGDRegressor(penalty='l1', alpha=0.1/m, random_state=29)
+```
+
+
+### Elastic Net Regression
+
+Elastic Net is weighted sum of Ridge and Lasso regression, change the weights by *r* rate: 0 (more Ridge) to 1 (more Lasso)
+
+$$
+J(θ) = MSE(θ) + r*\frac{α}{2m}\sum_{i=1}^{m}w_i^2 + (1-r)α\sum_{i=1}^{m}|w_i|
+$$
+
+```{python}
+from sklearn.linear_model import ElasticNet
+
+elast = ElasticNet(alpha=0.01, l1_ratio=0.5)
+```
+
+
+## Early Stopping
+
+Another way to regularize iterative learning algorithms (e.g. GD): *partial_fit* for n epochs and save the model has the lowest validation error
+
+```{python}
+from copy import deepcopy
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+
+
+## Create data
+
+np.random.seed(29)
+m = 100
+X = 6 * np.random.rand(m, 1) - 3
+y = 0.5 * X ** 2 + X + 2 + np.random.randn(m, 1)
+epochs = 500
+best_rmse = np.inf
+
+x_train, x_test, y_train, y_test = train_test_split(X, y)
+
+preprocessing = make_pipeline(PolynomialFeatures(degree=90, include_bias=False), StandardScaler())
+X_train = preprocessing.fit_transform(x_train)
+X_test = preprocessing.transform(x_test)
+
+
+sgd = SGDRegressor(penalty='elasticnet', alpha=0.01, l1_ratio=0.5, eta0=0.001, random_state=29)
+
+for epoch in range(epochs):
+    sgd.partial_fit(X_train, y_train.ravel())
+    y_pred = sgd.predict(X_test)
+    rmse = mean_squared_error(y_test, y_pred, squared=False)
+    if rmse < best_rmse:
+        best_rmse = rmse
+        best_model = deepcopy(sgd)
+
+y_pred = best_model.predict(X_test)
+
+
+## Another way to apply early stopping
+
+# sgd = SGDRegressor(penalty='elasticnet', alpha=0.01, l1_ratio=0.5, max_iter = 2000, tol=0.00001, shuffle=True, random_state=29, learning_rate='invscaling', eta0=0.001, early_stopping=True, validation_fraction=0.25, n_iter_no_change=10)
+# sgd.fit(X_train, y_train.ravel())
+# y_pred = sgd.predict(X_test)
+print('RMSE: %.2f' % mean_squared_error(y_test, y_pred))
+```
+
+::: {.callout-tip}
+*partial_fit*: *max_iter=1* (fit 1 epoch per calling); learn `incrementally` from a mini-batch of instances => useful when data is not fit into memory
+
+*fit*: train model from scratch (all instances at once)
+
+*fit(warm_start=True)* = partial_fit: allow learning from the weights of previous fit
+
+copy.deepcopy(): copies both the model’s *hyperparameters* and the *learned parameters*
+
+sklearn.base.clone() only copies the model’s *hyperparameters*.
+:::
+

@@ -1,0 +1,31 @@
+# Gradient Descent {#sec-gradient-descent}
+
+
+## Batch Gradient Descent
+
+- [i] Full Gradient Descent => *terribly slow*
+- [i] Gradient:
+$$∇ = \frac{1}{m} X^{T}(Χθ-y)$$
+- [i] Scale well with number of features
+
+
+## Stochastic Gradient Descent
+
+- [i] Pick a random instance at every *step* (not *epoch*) to compute *gradient*
+- [i] Out-of-core algorithm
+- [!] Cost function: cost function is erratic, continue bounch around when get to the global minimum
+	- Can jump out local minimum 
+	- Weights are good, not optimal => Improve by set *gradually reduce learning_rate* (called *learning schedule*)
+	- Randomness => Improve by *shuffling* to ensure pick every instance
+
+
+
+## Mini-Batch Gradient Descent
+
+- [i] Compute *gradient* on small random sets called *mini-batches* (boost by GPUs)
+- [i] Less erratic
+
+
+![[Pasted image 20240115083333.png]]
+
+
