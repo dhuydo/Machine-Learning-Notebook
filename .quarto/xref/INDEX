@@ -48,6 +48,8 @@
     "svm.html": "f26b209a"
   },
   "decision-tree.qmd": {
-    "decision-tree.html": "dba38055"
+    "decision-tree.html": "dba38055",
+    "decision-tree.tex": "01828d9f",
+    "decision-tree.epub": "1663134a"
   }
 }

@@ -11,7 +11,7 @@ book:
     left:
       Machine Learning Notebook was written by Nguyen Cao Duc Huy
   sidebar:
-    logo: images/cover2.png
+    logo: images/cover.png
   chapters:
     - index.qmd
     - landscape.qmd
@@ -42,7 +42,7 @@ format:
   pdf:
     documentclass: scrreport
   epub:
-    cover-image: cover.png
+    cover-image: images/cover.png
 
 editor: visual
 
