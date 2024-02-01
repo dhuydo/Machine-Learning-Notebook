@@ -1,1 +1,1 @@
-{"options":{"chapter-id":"sec-metrics","chapters":true},"entries":[{"order":{"section":[10,0,0,0,0,0,0],"number":1},"key":"sec-metrics"}],"headings":["sklearn-documents","classification","accuracy","confusion-matrix","sec-metrics"]}
+{"options":{"chapters":true,"chapter-id":"sec-metrics"},"entries":[{"order":{"section":[11,0,0,0,0,0,0],"number":1},"key":"sec-metrics"}],"headings":["sklearn-documents","classification","accuracy","confusion-matrix","sec-metrics"]}

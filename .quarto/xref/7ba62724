@@ -1,1 +1,1 @@
-{"entries":[{"order":{"section":[4,0,0,0,0,0,0],"number":1},"key":"sec-gradient-descent"}],"options":{"chapter-id":"sec-gradient-descent","chapters":true},"headings":["batch-gradient-descent","stochastic-gradient-descent","mini-batch-gradient-descent","sec-gradient-descent"]}
+{"headings":["batch-gradient-descent","stochastic-gradient-descent","mini-batch-gradient-descent","sec-gradient-descent"],"entries":[{"key":"sec-gradient-descent","order":{"number":1,"section":[4,0,0,0,0,0,0]}}],"options":{"chapter-id":"sec-gradient-descent","chapters":true}}
