@@ -39,10 +39,6 @@ format:
       dark: darkly
     author-meta: "Nguyen Cao Duc Huy"
     callout-appearance: simple
-  pdf:
-    documentclass: scrreport
-  epub:
-    cover-image: images/cover.png
 
 editor: visual
 

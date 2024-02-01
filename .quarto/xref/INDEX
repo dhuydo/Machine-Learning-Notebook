@@ -27,13 +27,17 @@
     "dim-reduction.html": "3eb08304"
   },
   "hands-on-classification.qmd": {
-    "hands-on-classification.html": "e9b4c14d"
+    "hands-on-classification.html": "e9b4c14d",
+    "hands-on-classification.tex": "0085e585",
+    "hands-on-classification.epub": "78622128"
   },
   "regression.qmd": {
     "regression.html": "b408b99e"
   },
   "classification.qmd": {
-    "classification.html": "29f2c262"
+    "classification.html": "29f2c262",
+    "classification.tex": "45f64ba9",
+    "classification.epub": "e9185407"
   },
   "hands-on-regression.qmd": {
     "hands-on-regression.html": "89e0a8e0"
