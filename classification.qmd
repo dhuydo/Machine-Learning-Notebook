@@ -1,6 +1,6 @@
 # Classification {#sec-classification}
 
-Classification is a *supervised learning* problem whose output are categorical, different from @sec-regression of which are numerical. 
+Classification is a *supervised learning* problem whose output are categorical, different from [Linear regression](regression.qmd#linear-regression) of which are numerical. 
 
 The algorithms used to handle classification problems are divided into the following groups: Binary classification, multiclass classification, multilabel classification, multioutput classification, etc.
 
