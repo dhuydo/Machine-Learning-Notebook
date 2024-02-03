@@ -16,7 +16,7 @@ Decision trees are versatile machine learning algorithms that can perform both c
 - Do not require feature scaling.\
 - The algorithm selects the best feature at each decision point, aiming to maximize information gain (for classification) or variance reduction (for regression). Decision trees are interpretable, easy to visualize, and can handle both numerical and categorical data. However, they may be prone to overfitting, which can be addressed using techniques like pruning.\
 - Ensemble methods, such as Random Forests and Gradient Boosting, often use multiple decision trees to enhance predictive performance and address the limitations of individual trees.\
-- Decision Tree *(white box model, interpretable ML)* vs Random Forest, NNs *(black box model)*
+- Decision Tree is white box model which is interpretable ML,  vs Random Forest, Neural Networks is black box model (not easy to interpret).
 
 - Some DT algorithm:
 	- ID3, C4.5 (Information Gain/ Information Gain Ratio)\
