@@ -27,7 +27,7 @@ book:
     - hands-on-classification.qmd
     - svm.qmd
     - decision-tree.qmd
-    - dim-reduction.qmd
+    - dimensionality-reduction.qmd
     - part: Appendix
       chapters: 
         - metrics.qmd
