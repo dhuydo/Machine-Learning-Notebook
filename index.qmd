@@ -1,7 +1,10 @@
 # Welcome {.unnumbered}
 
+Helo be iu
+
 Are you curious about how Google Translate works across 133 languages, how Recommendation Systems work on E-commerce platforms, how Autopilot in self-driving cars work or even how Robots interact with their surroundings?
 
 These are some of the applications of Machine Learning in real life. So what actually is Machine Learning ?
 
 Hi everyone, my name is Nguyen Cao Duc Huy. I am studying Master of Data Science at HCMUS. I intent to write some posts to share my knowledge and experience of Machine Learning in a close and understandable way and focus more on practicing. Hope they will help you understand and be able to work in this interesting and fast-evolving field.
+
