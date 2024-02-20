@@ -1,16 +1,12 @@
 project:
   type: book
   output-dir: docs
-  render: 
-    - index.qmd
-    - landscape.qmd
-    - project-checklist.qmd
 
 
 book:
   title: "Machine Learning Notebook"
   author: "Nguyen Cao Duc Huy"
-  date: "1/02/2024"
+  date: "01/02/2024"
   page-footer:
     left:
       Machine Learning Notebook was written by Nguyen Cao Duc Huy
@@ -28,6 +24,8 @@ book:
     - svm.qmd
     - decision-tree.qmd
     - dimensionality-reduction.qmd
+    - ensemble-learning.qmd
+    - unsupervised-learning.qmd
     - part: Appendix
       chapters: 
         - metrics.qmd

@@ -1,3 +1,8 @@
+---
+execute:
+    freeze: auto
+---
+
 # Classification {#sec-classification}
 
 Classification is a *supervised learning* problem whose output are categorical, different from [Linear regression](regression.qmd#linear-regression) of which are numerical. 

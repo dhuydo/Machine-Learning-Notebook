@@ -8,7 +8,7 @@
 
 <meta name="author" content="Nguyen Cao Duc Huy">
 
-<title>Machine Learning Notebook - 11&nbsp; Metrics and scoring</title>
+<title>Machine Learning Notebook - 13&nbsp; Metrics and scoring</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,7 +31,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./dim-reduction.html" rel="prev">
+<link href="./unsupervised-learning.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -76,7 +76,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./metrics.html">Appendix</a></li><li class="breadcrumb-item"><a href="./metrics.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./metrics.html">Appendix</a></li><li class="breadcrumb-item"><a href="./metrics.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -169,8 +169,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dim-reduction.html" class="sidebar-item-text sidebar-link">
+  <a href="./dimensionality-reduction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dimensionality Reduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ensemble-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ensemble Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unsupervised-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -185,7 +197,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./metrics.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
   </div>
 </li>
       </ul>
@@ -200,11 +212,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#sklearn-documents" id="toc-sklearn-documents" class="nav-link active" data-scroll-target="#sklearn-documents"><span class="header-section-number">11.1</span> Sklearn documents</a></li>
-  <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification"><span class="header-section-number">11.2</span> Classification</a>
+  <li><a href="#sklearn-documents" id="toc-sklearn-documents" class="nav-link active" data-scroll-target="#sklearn-documents"><span class="header-section-number">13.1</span> Sklearn documents</a></li>
+  <li><a href="#classification" id="toc-classification" class="nav-link" data-scroll-target="#classification"><span class="header-section-number">13.2</span> Classification</a>
   <ul class="collapse">
-  <li><a href="#accuracy" id="toc-accuracy" class="nav-link" data-scroll-target="#accuracy"><span class="header-section-number">11.2.1</span> Accuracy</a></li>
-  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix"><span class="header-section-number">11.2.2</span> Confusion matrix</a></li>
+  <li><a href="#accuracy" id="toc-accuracy" class="nav-link" data-scroll-target="#accuracy"><span class="header-section-number">13.2.1</span> Accuracy</a></li>
+  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix"><span class="header-section-number">13.2.2</span> Confusion matrix</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -214,7 +226,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span id="sec-metrics" class="quarto-section-identifier"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></h1>
+<h1 class="title"><span id="sec-metrics" class="quarto-section-identifier"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></h1>
 </div>
 
 
@@ -229,24 +241,24 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="sklearn-documents" class="level2" data-number="11.1">
-<h2 data-number="11.1" class="anchored" data-anchor-id="sklearn-documents"><span class="header-section-number">11.1</span> Sklearn documents</h2>
+<section id="sklearn-documents" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="sklearn-documents"><span class="header-section-number">13.1</span> Sklearn documents</h2>
 <p><a href="https://scikit-learn.org/stable/modules/model_evaluation.html">sklearn.metrics</a></p>
 </section>
-<section id="classification" class="level2" data-number="11.2">
-<h2 data-number="11.2" class="anchored" data-anchor-id="classification"><span class="header-section-number">11.2</span> Classification</h2>
-<section id="accuracy" class="level3" data-number="11.2.1">
-<h3 data-number="11.2.1" class="anchored" data-anchor-id="accuracy"><span class="header-section-number">11.2.1</span> Accuracy</h3>
+<section id="classification" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="classification"><span class="header-section-number">13.2</span> Classification</h2>
+<section id="accuracy" class="level3" data-number="13.2.1">
+<h3 data-number="13.2.1" class="anchored" data-anchor-id="accuracy"><span class="header-section-number">13.2.1</span> Accuracy</h3>
 <ul>
 <li>accuracy(y_true, y_pred)</li>
 <li>Proportion of exact match prediction of the model</li>
 <li>As this <a href="./hands-on-classification.html#evaluate-model">case</a>, the result showed that with the presence of class immbalance, accuracy score is not useful metric</li>
 </ul>
 </section>
-<section id="confusion-matrix" class="level3" data-number="11.2.2">
-<h3 data-number="11.2.2" class="anchored" data-anchor-id="confusion-matrix"><span class="header-section-number">11.2.2</span> Confusion matrix</h3>
+<section id="confusion-matrix" class="level3" data-number="13.2.2">
+<h3 data-number="13.2.2" class="anchored" data-anchor-id="confusion-matrix"><span class="header-section-number">13.2.2</span> Confusion matrix</h3>
 <ul>
-<li>nsdf nnsf</li>
+<li>In progress</li>
 </ul>
 
 
@@ -604,8 +616,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./dim-reduction.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dimensionality Reduction</span></span>
+      <a href="./unsupervised-learning.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

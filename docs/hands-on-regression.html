@@ -209,8 +209,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dim-reduction.html" class="sidebar-item-text sidebar-link">
+  <a href="./dimensionality-reduction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dimensionality Reduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ensemble-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ensemble Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unsupervised-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -225,7 +237,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./metrics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
   </div>
 </li>
       </ul>
@@ -252,6 +264,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul class="collapse">
   <li><a href="#visualize" id="toc-visualize" class="nav-link" data-scroll-target="#visualize"><span class="header-section-number">5.4.1</span> Visualize</a></li>
   <li><a href="#attributes-combination" id="toc-attributes-combination" class="nav-link" data-scroll-target="#attributes-combination"><span class="header-section-number">5.4.2</span> Attributes combination</a></li>
+  </ul></li>
+  <li><a href="#explore-and-visualize-data" id="toc-explore-and-visualize-data" class="nav-link" data-scroll-target="#explore-and-visualize-data"><span class="header-section-number">5.5</span> Explore and Visualize Data</a></li>
+  <li><a href="#prepare-data" id="toc-prepare-data" class="nav-link" data-scroll-target="#prepare-data"><span class="header-section-number">5.6</span> Prepare Data</a>
+  <ul class="collapse">
+  <li><a href="#clean-data" id="toc-clean-data" class="nav-link" data-scroll-target="#clean-data"><span class="header-section-number">5.6.1</span> Clean Data</a></li>
+  <li><a href="#handling-text-and-categorical-attributes" id="toc-handling-text-and-categorical-attributes" class="nav-link" data-scroll-target="#handling-text-and-categorical-attributes"><span class="header-section-number">5.6.2</span> Handling Text and Categorical Attributes</a></li>
+  <li><a href="#feature-scaling-and-tranformations" id="toc-feature-scaling-and-tranformations" class="nav-link" data-scroll-target="#feature-scaling-and-tranformations"><span class="header-section-number">5.6.3</span> Feature Scaling and Tranformations</a></li>
+  <li><a href="#custom-transformers" id="toc-custom-transformers" class="nav-link" data-scroll-target="#custom-transformers"><span class="header-section-number">5.6.4</span> Custom Transformers</a></li>
+  <li><a href="#transformation-pipelines" id="toc-transformation-pipelines" class="nav-link" data-scroll-target="#transformation-pipelines"><span class="header-section-number">5.6.5</span> Transformation Pipelines</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -341,9 +362,9 @@ Main Steps
 <p><strong>Answers</strong></p>
 <ul>
 <li>Predict median housing price in any district. The results are used for another ML system for investment analysis. The current solution is to gather up-to-date information about a district, or to estimate manually using complex rules if no information.</li>
-<li>The current solution is costly and time-consuming, and it was often off by more than 30%. Therefore, a ML model could be more useful</li>
+<li>The current solution is costly and time-consuming, and it was often off by more than 30%. Therefore, a ML model could be more useful.</li>
 <li>Data pipelines: A sequence of data processing components. Pipelines are very common in machine learning systems, since there is a lot of data to manipulate and many data transformations to apply.</li>
-<li>This is a regression task (labeled data), batch learning (data is quite small and not change too much) and model-based learning</li>
+<li>This is a regression task (labeled data), batch learning (data is quite small and do not change too much) and model-based learning</li>
 <li>Metrics for regression:</li>
 </ul>
 <div class="callout callout-style-simple callout-note callout-titled">
@@ -359,9 +380,9 @@ Expand to learn more about metrics
 <div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Both the RMSE and the MAE are ways to measure the distance between two vectors: the vector of predictions and the vector of target values. Various distance measures, or norms, are possible:<br>
-• Computing the root of a sum of squares (RMSE) corresponds to the Euclidean norm: this is the notion of distance we are all familiar with. It is also called the l2 norm, noted |·|₂ (or just |·|).<br>
-• Computing the sum of absolutes (MAE) corresponds to the l1 norm, noted |·|₁. This is sometimes called the Manhattan norm because it measures the distance between two points in a city if you can only travel along orthogonal city blocks.<br>
-• More generally, the lk norm of a vector v containing n elements is defined as ∥v∥k = (|v₁|ᵏ + |v₂|ᵏ + … + |vₙ|ᵏ)¹/ᵏ. l0 gives the number of nonzero elements in the vector, and l∞ gives the maximum absolute value in the vector.<br>
+- Computing the root of a sum of squares (RMSE) corresponds to the Euclidean norm: this is the notion of distance we are all familiar with. It is also called the l2 norm, noted |·|₂ (or just |·|).<br>
+- Computing the sum of absolutes (MAE) corresponds to the l1 norm, noted |·|₁. This is sometimes called the Manhattan norm because it measures the distance between two points in a city if you can only travel along orthogonal city blocks.<br>
+- More generally, the lk norm of a vector v containing n elements is defined as ∥v∥k = (|v₁|ᵏ + |v₂|ᵏ + … + |vₙ|ᵏ)¹/ᵏ. l0 gives the number of nonzero elements in the vector, and l∞ gives the maximum absolute value in the vector.<br>
 The higher the norm index, the more it focuses on large values and neglects small ones. This is why the RMSE is more sensitive to outliers than the MAE. But when outliers are exponentially rare (like in a bell-shaped curve), the RMSE performs very well and is generally preferred. <img src="images/l1_l2.png" id="fig-l1-l2" class="img-fluid" alt="L1 norm and L2 norm"></p>
 </div>
 </div>
@@ -764,7 +785,7 @@ These features are <code>skewed</code> and have very <code>different scales</cod
 </section>
 <section id="explore-and-visualize-the-data-to-gain-insights" class="level2" data-number="5.4">
 <h2 data-number="5.4" class="anchored" data-anchor-id="explore-and-visualize-the-data-to-gain-insights"><span class="header-section-number">5.4</span> Explore and visualize the data to gain insights</h2>
-<p>If the data is very large, we will sample an exploration set to manipulate faster and easier. On the other hand, just work directly on full set if the data is quite small</p>
+<p>If the data is very large, we will sample an exploration set to manipulate faster and easier. On the other hand, just work directly on full set if the data is quite small.</p>
 <div class="cell" data-execution_count="10">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>df_vis <span class="op">=</span> data.copy()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -851,6 +872,238 @@ latitude             -0.144160
 bedroom_ratio        -0.255880
 Name: median_house_value, dtype: float64</code></pre>
 </div>
+</div>
+</section>
+</section>
+<section id="explore-and-visualize-data" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="explore-and-visualize-data"><span class="header-section-number">5.5</span> Explore and Visualize Data</h2>
+<ul>
+<li>Visualize</li>
+<li>Compute correlation (corr_matrix(), pandas.plotting.scatter_matrix() )</li>
+<li>Attributes combination</li>
+</ul>
+</section>
+<section id="prepare-data" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="prepare-data"><span class="header-section-number">5.6</span> Prepare Data</h2>
+<p>Benefits: - Reproduce tranformations easily - Build library of tranformations for future projects - Use in live system to transform new data - Try various transformations =&gt; Choose best combination of transformations</p>
+<section id="clean-data" class="level3" data-number="5.6.1">
+<h3 data-number="5.6.1" class="anchored" data-anchor-id="clean-data"><span class="header-section-number">5.6.1</span> Clean Data</h3>
+<p>Missing Values: - Get rid of them - Get rid of whole attributes - Set new values (imputation): zero, mean, median, most_frequent, constant, etc. - sklearn.impute.SimpleImputer() - Apply to all numerical variables cause we do not know there will not be any missing values in the future. - More powerful imputer: KnnImputer(), IterativeImputer()</p>
+</section>
+<section id="handling-text-and-categorical-attributes" class="level3" data-number="5.6.2">
+<h3 data-number="5.6.2" class="anchored" data-anchor-id="handling-text-and-categorical-attributes"><span class="header-section-number">5.6.2</span> Handling Text and Categorical Attributes</h3>
+<ul>
+<li>OneHotEncoder, LabelEncoder, OrdinalEncoder
+<ul>
+<li>default: Scipy sparse matrix =&gt; set sparse=False or toarray()</li>
+<li>pandas.get_dummies(): generate new columns for unknown categories</li>
+<li>OneHotEncoder: detect unknown categories</li>
+</ul></li>
+<li>If a categorical attribute has a large number of possible categories =&gt; OneHotEncoder will be result in a large number of input features
+<ul>
+<li>Turn categorical -&gt; numerical category</li>
+<li>In <em>neural networks</em>: replace each category -&gt; <em>embedding</em> (a learnable, low-dimensional vector)</li>
+</ul></li>
+</ul>
+</section>
+<section id="feature-scaling-and-tranformations" class="level3" data-number="5.6.3">
+<h3 data-number="5.6.3" class="anchored" data-anchor-id="feature-scaling-and-tranformations"><span class="header-section-number">5.6.3</span> Feature Scaling and Tranformations</h3>
+<section id="for-input-attributes" class="level4" data-number="5.6.3.1">
+<h4 data-number="5.6.3.1" class="anchored" data-anchor-id="for-input-attributes"><span class="header-section-number">5.6.3.1</span> For input attributes</h4>
+<ul>
+<li>Some ML algorithms don’t perform well when the input numerical attributes have very different scales.</li>
+<li>Without any scaling, most models will be biased toward ignoring the small values and focusing more on the larger values.</li>
+</ul>
+<p>Two common feature scaling techniques: <em>min-max scaling</em> and <em>standardization</em> - Use <em>fit</em> or <em>fit_transform</em> only on <strong>training set</strong> - <strong>Training set</strong> will always be scaled to specific range, if new data contains outliers, these may end up scaled outside the range =&gt; Set clip hyperparameter to <em>True</em> to avoid.</p>
+<ul>
+<li><p><strong>Min-max scaling (normalization)</strong>:</p></li>
+<li><p>Default range: 0-1</p></li>
+<li><p>MinMaxScaler(feature_range=(-1,1)): change the prefered range</p></li>
+<li><p><strong>Standardization</strong>:</p></li>
+<li><p>Less affected by outliers</p></li>
+<li><p>StandardScaler(with_mean=False): only divide the data by the standard deviation, without subtracting the mean =&gt; scale sparse matrix without converting to dense matrix</p></li>
+<li><p><em>Heavy-tailed attributes</em>:</p></li>
+<li><p>Both min-max scaling and standardization will squash most values into a small range</p></li>
+<li><p>Solutions: square root (or power 0-1), logarithm, bucketizing</p>
+<ul>
+<li>bucketizing: chop its distribution into equal-sized buckets =&gt; replace with the index (i.e.&nbsp;<em>percentile</em>, <em>categories (for multimodal distribution)</em>) of buckets.
+<ul>
+<li><em>multimodal distribution</em>: 2 or more clear peaks (also called mode).</li>
+</ul></li>
+<li>other options for <em>multimodal distribution</em>: Gaussian radial basic function (RBF) measure the similarity between that attribute and the modes.</li>
+</ul></li>
+</ul>
+</section>
+<section id="for-output" class="level4" data-number="5.6.3.2">
+<h4 data-number="5.6.3.2" class="anchored" data-anchor-id="for-output"><span class="header-section-number">5.6.3.2</span> For output</h4>
+<p>After feature scaling the target values to make predictions on new data, it has to be <em>inverse_transform()</em>, or just do TransformedTargetRegressor.</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> TransformedTargetRegressor</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> TransformedTargetRegressor(LinearRegression(),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>                                       transformer<span class="op">=</span>StandardScaler())</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># model.fit(housing[["median_income"]], housing_labels)</span></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># predictions = model.predict(some_new_data)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+</section>
+<section id="custom-transformers" class="level3" data-number="5.6.4">
+<h3 data-number="5.6.4" class="anchored" data-anchor-id="custom-transformers"><span class="header-section-number">5.6.4</span> Custom Transformers</h3>
+<p>Write own custom transformers: custom transformations, cleanup operations, or combining specific attributes.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> FunctionTransformer</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong><em>For details, check p.79, 80, 81</em></strong></p>
+<ul>
+<li>A transformer should contains:
+<ul>
+<li>fit(): self.n_features_in_ , return <em>self</em></li>
+<li>get_feature_names_out() =&gt; to create DataFrame after <em>transform</em></li>
+<li>inverse_transform()</li>
+</ul></li>
+<li>This is a custom transformer using <em>KMeans clusterer</em> in the fit() method to identify the main clusters in the training data, and then uses <em>rbf_kernel()</em> in the transform() method to measure how similar each sample is to each cluster center:</li>
+</ul>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.cluster <span class="im">import</span> KMeans</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.base <span class="im">import</span> BaseEstimator, TransformerMixin</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> ClusterSimilarity(BaseEstimator, TransformerMixin):  </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, n_clusters<span class="op">=</span><span class="dv">10</span>, gamma<span class="op">=</span><span class="fl">1.0</span>, random_state<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.n_clusters <span class="op">=</span> n_clusters</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gamma <span class="op">=</span> gamma</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.random_state <span class="op">=</span> random_state</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> fit(<span class="va">self</span>, X, y<span class="op">=</span><span class="va">None</span>, sample_weight<span class="op">=</span><span class="va">None</span>):  </span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.kmeans_ <span class="op">=</span> KMeans(<span class="va">self</span>.n_clusters, random_state<span class="op">=</span><span class="va">self</span>.random_state) </span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.kmeans_.fit(X, sample_weight<span class="op">=</span>sample_weight)  </span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span> <span class="co"># always return self!</span></span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> transform(<span class="va">self</span>, X):  </span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> rbf_kernel(X, <span class="va">self</span>.kmeans_.cluster_centers_, gamma<span class="op">=</span><span class="va">self</span>.gamma)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_feature_names_out(<span class="va">self</span>, names<span class="op">=</span><span class="va">None</span>):  </span>
+<span id="cb18-19"><a href="#cb18-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> [<span class="ss">f"Cluster </span><span class="sc">{</span>i<span class="sc">}</span><span class="ss"> similarity"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="va">self</span>.n_clusters)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong><em>For details, check p.82</em></strong></p>
+<ul>
+<li>You can check whether your custom estimator respects <em>Scikit-Learn’s API</em> by passing an instance to check_estimator() from the sklearn.utils.estimator_checks package. For the full API, check out https://scikit-learn.org/stable/developers.</li>
+</ul>
+</section>
+<section id="transformation-pipelines" class="level3" data-number="5.6.5">
+<h3 data-number="5.6.5" class="anchored" data-anchor-id="transformation-pipelines"><span class="header-section-number">5.6.5</span> Transformation Pipelines</h3>
+<ul>
+<li><p><strong>Pipeline</strong>: sequence of transformations =&gt; Take list of names/estimators</p>
+<ul>
+<li>Names must be <em>unique</em> and do not contain <em>double underscores</em></li>
+<li>First (n-1) names: <em>transformers</em> Last name: regardless <em>transformer</em> or <em>predictor</em></li>
+</ul></li>
+</ul>
+<p>2 ways:</p>
+<p><strong>Pipeline</strong></p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>num_pipeline <span class="op">=</span> Pipeline([</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"impute"</span>, SimpleImputer(strategy<span class="op">=</span><span class="st">"median"</span>)),</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"standardize"</span>, StandardScaler()),</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>make_pipeline</strong> (don’t care naming estimators)</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> make_pipeline  </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>num_pipeline <span class="op">=</span> make_pipeline(SimpleImputer(strategy<span class="op">=</span><span class="st">"median"</span>), StandardScaler())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p>The pipeline exposes the same methods as the <em>final estimator</em> (transformer or predictor)</p></li>
+<li><p>In a Jupyter notebook, if we import sklearn and run sklearn.set_config(display=“diagram”), all Scikit-Learn estimators will be rendered as interactive diagrams. This is particularly useful for visualizing pipelines. To visualize <em>num_pipeline</em>, run a cell with num_pipeline as the last line. Clicking an estimator will show more details.</p></li>
+<li><p>2 ways to apply transform for numerical attributes and categorical attributes <em>seperately</em>:</p></li>
+</ul>
+<p><strong>ColumnTransformer</strong>:</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> ColumnTransformer</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.pipeline <span class="im">import</span> Pipeline, make_pipeline</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.impute <span class="im">import</span> SimpleImputer</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.preprocessing <span class="im">import</span> StandardScaler, OneHotEncoder</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>num_attribs <span class="op">=</span> [<span class="st">"longitude"</span>, <span class="st">"latitude"</span>, <span class="st">"housing_median_age"</span>, <span class="st">"total_rooms"</span>, <span class="st">"total_bedrooms"</span>, <span class="st">"population"</span>, <span class="st">"households"</span>, <span class="st">"median_income"</span>]</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>cat_attribs <span class="op">=</span> [<span class="st">"ocean_proximity"</span>]</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>num_pipeline <span class="op">=</span> Pipeline([</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"impute"</span>, SimpleImputer(strategy<span class="op">=</span><span class="st">"median"</span>)),</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"standardize"</span>, StandardScaler()),</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>])</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>cat_pipeline <span class="op">=</span> make_pipeline(</span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    SimpleImputer(strategy<span class="op">=</span><span class="st">"most_frequent"</span>),</span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    OneHotEncoder(handle_unknown<span class="op">=</span><span class="st">"ignore"</span>))</span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>preprocessing <span class="op">=</span> ColumnTransformer([</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"num"</span>, num_pipeline, num_attribs),</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"cat"</span>, cat_pipeline, cat_attribs),</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>make_column_selector</strong>, <strong>make_column_transformer</strong> (don’t care naming estimators)</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.compose <span class="im">import</span> make_column_selector, make_column_transformer</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>preprocessing <span class="op">=</span> make_column_transformer(</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    (num_pipeline, make_column_selector(dtype_include<span class="op">=</span>np.number)),</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    (cat_pipeline, make_column_selector(dtype_include<span class="op">=</span><span class="bu">object</span>)),</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<ul>
+<li><p>Drop or passthrough columns: *<strong>For details, see p.86</strong></p></li>
+<li><p><strong>Recap Pipeline</strong></p></li>
+<li><p>Missing values in numerical features will be imputed by replacing them with the median, as most ML algorithms don’t expect missing values. In categorical features, missing values will be replaced by the most frequent category.</p></li>
+<li><p>The categorical feature will be one-hot encoded, as most ML algorithms only accept numerical inputs.</p></li>
+<li><p>A few ratio features will be computed and added: bedrooms_ratio, rooms_per_house, and people_per_house. Hopefully these will better correlate with the median house value, and thereby help the ML models.</p></li>
+<li><p>A few cluster similarity features will also be added. These will likely be more useful to the model than latitude and longitude.</p></li>
+<li><p>Features with a long tail will be replaced by their logarithm, as most models prefer features with roughly uniform or Gaussian distributions.</p></li>
+<li><p>All numerical features will be standardized, as most ML algorithms prefer when all features have roughly the same scale.</p></li>
+</ul>
+<p><strong>Final Pipeline</strong>:</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> column_ratio(X):  </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> X[:, [<span class="dv">0</span>]] <span class="op">/</span> X[:, [<span class="dv">1</span>]]</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ratio_name(function_transformer, feature_names_in): </span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [<span class="st">"ratio"</span>] <span class="co">#feature names out</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ratio_pipeline(): </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> make_pipeline(</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>        SimpleImputer(strategy<span class="op">=</span><span class="st">"median"</span>),</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>        FunctionTransformer(column_ratio, feature_names_out<span class="op">=</span>ratio_name),</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>        StandardScaler())</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>log_pipeline <span class="op">=</span> make_pipeline(</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>    SimpleImputer(strategy<span class="op">=</span><span class="st">"median"</span>),</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>    FunctionTransformer(np.log, feature_names_out<span class="op">=</span><span class="st">"one-to-one"</span>),</span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>    StandardScaler())</span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a>cluster_simil <span class="op">=</span> ClusterSimilarity(n_clusters<span class="op">=</span><span class="dv">10</span>, gamma<span class="op">=</span><span class="fl">1.</span>, random_state<span class="op">=</span><span class="dv">42</span>)</span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a>default_num_pipeline <span class="op">=</span> make_pipeline(SimpleImputer(strategy<span class="op">=</span><span class="st">"median"</span>),</span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a>        StandardScaler())</span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a>preprocessing <span class="op">=</span> ColumnTransformer([</span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"bedrooms"</span>, ratio_pipeline(), [<span class="st">"total_bedrooms"</span>, <span class="st">"total_rooms"</span>]),</span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"rooms_per_house"</span>, ratio_pipeline(), [<span class="st">"total_rooms"</span>, <span class="st">"households"</span>]),</span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"people_per_house"</span>, ratio_pipeline(), [<span class="st">"population"</span>, <span class="st">"households"</span>]),</span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"log"</span>, log_pipeline, [<span class="st">"total_bedrooms"</span>, <span class="st">"total_rooms"</span>, <span class="st">"population"</span>,</span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a>                            <span class="st">"households"</span>, <span class="st">"median_income"</span>]),</span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"geo"</span>, cluster_simil, [<span class="st">"latitude"</span>, <span class="st">"longitude"</span>]),</span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a>    (<span class="st">"cat"</span>, cat_pipeline, make_column_selector(dtype_include<span class="op">=</span><span class="bu">object</span>)),</span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a>    remainder<span class="op">=</span>default_num_pipeline) <span class="co"># one column remaining: housing_median_age</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

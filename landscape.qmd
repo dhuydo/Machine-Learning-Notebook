@@ -1,17 +1,22 @@
+---
+execute:
+    freeze: auto
+---
+
 # Machine Learning Landscape {#sec-landscape}
 
 
 ::: {.callout-caution collapse="true"}
-## Expand to View Questions from the Lesson
+## Expand to view questions from the lesson
 
-1. What is Machine Learning (ML)? Comparing ML Approach versus Traditional one?
+1. What is Machine Learning (ML)? Comparing ML approach versus traditional one?
 2. Applications of ML? Tasks that ML especially useful for?
-3. Present Types of ML System according to:
-    - Training Supervision: Supervised Learning, Unsupervised Learning, Reinforcement Learning, etc.
-    - Batch Learning versus Online Learning
-    - Instance-based versus Model-based
-4. Main Challenges of ML?
-5. The ML Project Workflow?
+3. Present types of ML system according to:
+    - Training Supervision: Supervised learning, unsupervised learning, reinforcement learning, etc.
+    - Batch learning versus online learning
+    - Instance-based versus model-based
+4. Main challenges of ML?
+5. The ML project workflow?
 :::
 
 
@@ -21,13 +26,13 @@
 
 **Traditional Approach**
 
-If you have a task using data to make a prediction (e.g. classification), with traditional approach you have to come up with a bunch of if-else clauses to handle it.\
+If you have a task using data to make a prediction (e.g. classification), with traditional approach you might have to come up with a bunch of if-else clauses to handle it.\
 
 For example, to write a spam email filter program, you have to know some words or phrases that usually appear in a spam email, then your program would flag emails as spam if a number of these patterns were detected. Finally, you would test your program until it was good enough to launch.
 
 ![Traditional approach](images/traditional-approach.png){#fig-traditional-approach}
 
-But how is it if the spammers notice the rules that we set? 
+**But how is it if the spammers notice the rules that we set?**
 
 They will adjust these patterns a little bit that our program cannot detect, and if they keep working around our spam filter, we will need to keep writing new rules that gradually become a very long complex list. This is where the ML approach comes into play.
 
@@ -43,37 +48,36 @@ In this case, a spam filter based on ML techniques automatically notices unusual
 ## Applications of Machine Learning
 
 *Common tasks*\
-- Regression: Forecast revenue, weather, impact of certificate scores on admission, financial and logistical forecasting\
-- Classification: Anomaly detection\
-- Clustering: Segmenting clients\
+- Regression: Forecast revenue, weather, impact of certificate scores on admission, financial and logistical forecasting.\
+- Classification: Anomaly detection.\
+- Clustering: Segmenting clients.\
 
 *Natural Language Processing*\
-Text classification (topic modeling, flagging offensive comments), text summarization, questions-answering modules (chatbot), speech recognition
+Text classification (topic modeling, flagging offensive comments), text summarization, questions-answering modules (chatbot), speech recognition.
 
 *Computer vision*\
-Image classification, semantic image segmentation, face recognition, image captioning
+Image classification, semantic image segmentation, face recognition, image captioning.
 
 *Recommendation system*\
-Web search, product recommendations, home page layout
+Web search, product recommendations, home page layout.
 
 *Robotics*\
-Handling objects, decision-making
+Handling objects, decision-making.
 
 *Medicine*\
-Finding anomalies in radiology images, measuring features in ultrasounds
+Finding anomalies in radiology images, measuring features in ultrasounds.
 
 *Biology*\
-Classifying cell/proteins, tumor-normal sequencing and classifying
+Classifying cell/proteins, tumor-normal sequencing and classifying.
 
 *Playing games*\
-Chess, Go, most Atari video games, and many real-time strategy games
+Chess, Go, most Atari video games, and many real-time strategy games.
 
 ::: {.callout-note}
 **To summarize, machine learning is especially great for:**\
-
-- Problems for which existing solutions are complex and/or require a lot of work\
-- Fluctuating environments, hard/retrain to keep up to date\
-- Getting insights about complex problems and large amounts of data
+- Problems for which existing solutions are complex and/or require a lot of work.\
+- Fluctuating environments, hard/retrain to keep up to date.\
+- Getting insights about complex problems and large amounts of data.
 :::
 
 
@@ -81,51 +85,54 @@ Chess, Go, most Atari video games, and many real-time strategy games
 
 ::: {.callout-note}
 **Machine Learning Systems are divided into 3 common types based on:**\
-
-- Training supervision: `supervised learning`, `unsupervised learning`, `reinforcement learning`\
-- Learn on the fly or not: `online learning` versus `batch learning`\
-- Learn by heart or detect patterns: `instance-based learning` versus `model-based learning`
+- Training supervision: supervised learning, unsupervised learning, reinforcement learning.\
+- Learn on the fly or not: online learning versus batch learning.\
+- Learn by heart or detect patterns: instance-based learning versus model-based learning.
 :::
 
 ### Training Supervision
 
-How they `supervised`: supervised, unsupervised, semi-supervised, self-supervised, etc.
+How they supervised: supervised, unsupervised, semi-supervised, self-supervised, etc.
 
-- `Supervised`: Classification and Regression
-- `Unsupervised`: Clustering, Dimensionality Reduction, Association Rule Learning
-- `Semi-supervised`: Partially labeled
-- `Self-supervised`: Unlabeled -> Fully labeled. Learn to generate labels. Unlike unsupervised learning, self-supervised focuses on classification and regression, although it learns from fully unlabeled data
-- `Reinforcement Learning`: Optimize rewards -> Find best strategy (called *policy*) itself
+- **Supervised**: Classification and Regression.
+- **Unsupervised**: Clustering, Dimensionality Reduction, Association Rule Learning.
+- **Semi-supervised**: Partially labeled.
+- **Self-supervised**: Unlabeled -> Fully labeled (learn to generate labels). Unlike unsupervised learning, self-supervised focuses on classification and regression, although it learns from fully unlabeled data
+- **Reinforcement Learning**: Optimize rewards -> Find best strategy (called *policy*) itself.
 
 ### Learn on the fly
 	
-Whether or not they can learn incrementally
+Whether or not they can learn incrementally.
 
-`Batch Learning` (also called `Offline Learning`)\ 
-
+**Batch Learning** (also called Offline Learning).\
 - Learn offline using all available data, apply what it has learned without learning more.\
-- Useful for areas that do not change too much => Model's performance will not decay fast\
-- Not useful for fast-evolving system (ie. financial market) => Model's performance will decay rellay fast => Have to train new model
+- Useful for areas that do not change too much.\
+	- Model's performance will not decay fast.\
+- Not useful for fast-evolving system (ie. financial market).\
+	- Model's performance will decay rellay fast.\
+	- Have to train new model.
 	
-`Online Learning` (also called `Incremental Learning`)\
-
-- Run and learn simultanously by feeding new data sequentially called mini-batches\
-- Suitable for rapidly changed system, limited computing resources. 
-- Important parameter: **learning rate**
-- Challenges: **bad data** => decline performance quickly => Solutions: monitor system (switch learning off, anomaly detection)
+**Online Learning** (also called Incremental Learning).\
+- Run and learn simultanously by feeding new data sequentially called mini-batches.\
+- Suitable for rapidly changed system, limited computing resources.\
+- Important parameter: `learning rate`.\
+- Challenges: `bad data`.\
+	- Decline performance quickly.\
+	- Solutions: monitor system (switch learning off, anomaly detection).
 
 ### Instance-Based Versus Model-Based Learning
 
-Compare new data to known data/Detect patterns in data
+Compare new data to known data/Detect patterns in data.
 	
-`Instance-based Learning`\
+**Instance-based Learning**
 
-- Learn by heart, then generalize new data using a similarity measure (e.g. k-Nearest Neighbors Regression)
+- Learn by heart, then generalize new data using a similarity measure (e.g. k-Nearest Neighbors Regression).
 	
-`Model-based Learning`\
+**Model-based Learning**\
 
-- Feed data as examples to model => Able to make predictions (e.g. Linear Regression)
-- Minimize **cost function** => Find **best parameters**
+- Feed data as examples to model 
+	- => Able to make predictions (e.g. Linear Regression).
+- Minimize **cost function** => Find **best parameters**.
 
 
 
@@ -133,56 +140,56 @@ Compare new data to known data/Detect patterns in data
 
 ### Insufficient Quantity of Data
 
-Consider the amount of data whether it's sufficient or not rather than abandon the algorithm
+Consider the amount of data whether it's sufficient or not rather than abandon the algorithm.
 
 ![The importance of data versus algorithms](images/data-algorithm.png){#fig-data-algorithm}
 
 ### Non-representative Training Data 
 
-The training data must be representative of the new cases you want to generalize to
-
-- If data is too small: `sampling noise`
-- If large data but flawed sampling method: `sampling bias`
+The training data must be representative of the new cases you want to generalize to.\
+- If data is too small: sampling noise.\
+- If large data but flawed sampling method: sampling bias.
 
 ### Poor-quality Data
 
-- *Errors*, *Outliers*, *Noises*, etc. => Model perform badly
+- *Errors*, *Outliers*, *Noises*, etc. 
+	- => Model perform badly.
 - *Solutions*:
-	- Remove outliers/Fix errors
+	- Remove outliers/Fix errors.
 	- Instances have missing features => 
-		- Ignore Instances
-		- Ignore Features
-		- Fill in Missing Values
-		- Train model with/without features
+		- Ignore Instances.
+		- Ignore Features.
+		- Fill in Missing Values.
+		- Train model with/without features.
 
 ### Irrelevant Features
 
 **Feature Engineering**: 
 
-- *Feature Selection*: Select most useful features
-- *Feature Extraction*: Combine existing features to produce a more useful one
-- *Create new feature*: from exist data/gather new data
+- Feature Selection: Select most useful features.
+- Feature Extraction: Combine existing features to produce a more useful one.
+- Create new feature: from exist data/gather new data.
 
 ### Overfitting the Training Data
-Model tends to *remember* data 
-=> Perform well on Training Data, but generalize badly (e.g. Fit noisy/too small data to complex models (NNs))
+Model tends to *remember* data.\
+=> Perform well on training Data, but generalize badly (e.g. Fit noisy/too small data to complex models (NNs)).
 
 **Solutions**: 
 
-- Choose simpler models (less parameters)
-- Contrain models (regularization)
-- Gather more data
-- Reduct noise data
+- Choose simpler models (less parameters).
+- Contrain models (regularization).
+- Gather more data.
+- Reduct noise data.
 
 ### Underfitting the Training Data
 
-Model is too simple to learn underlying structure of data
+Model is too simple to learn underlying structure of data.
 
 **Solutions**: 
 
-- Choose more powerful model (more parameters)
-- Reduce the model's contraints, 
-- Feature engineering
+- Choose more powerful model (more parameters).
+- Reduce the model's contraints.
+- Feature engineering.
 
 ### Summarise
 
@@ -197,13 +204,13 @@ Model is too simple to learn underlying structure of data
 
 ## Testing and Validating
 
-- train/val/test split
-- Error rate on new cases: `generalization error` (also called `out-of-sample error`)
-- `cross-validation`: 
+- Train/val/test split.
+- Error rate on new cases: generalization error (also called out-of-sample error).
+- Cross-validation: 
 	- using many small validation sets (n). 
 	- Train models n times with (n-1) validation sets => Test with the rest set. 
 	- Average results => much more accurate measure. 
-	- Drawback: the training time is multiplied by the number of validation sets
+	- Drawback: the training time is multiplied by the number of validation sets.
 
 ### Data Mismatch
 

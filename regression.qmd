@@ -1,12 +1,16 @@
-# Regression {#sec-regression}
+---
+execute:
+    freeze: auto
+---
 
+# Regression {#sec-regression}
 
 
 ## Linear Regression
 
 Suppose that we have a data set of demographic and healthcare cost for each individual in a city, and we want to predict the total healthcare cost based on age.
 
-If we use linear regression method for this task, we will assump that the relationship between these features is *linear* and try to fit a `line` so that is closest to the data. The plot looks like this.
+If we use linear regression method for this task, we will assump that the relationship between these features is *linear* and try to fit a line so that is closest to the data. The plot looks like this.
 
 ```{python}
 #| code-fold: true
@@ -141,7 +145,7 @@ X^{+} = VΣ^{+}U^{T}
 \end{gather}
 $$
 
-Implement Linear regression using sklearn
+Implement Linear Regression using sklearn
 
 ```{python}
 from sklearn.linear_model import LinearRegression
@@ -183,7 +187,7 @@ Loop step 3-5 until **converge**:\
 4. Compute `step size`: StepSize = Gradient * Learning_rate
 5. Compute new weights: New = Old - StepSize
 
-- [i] Run single epoch:
+- Run single epoch:
 	- partial_fit(): ignore (*max_iter*, *tol*) do not reset epoch counter
 	- fit(warm_start = True)
 
@@ -314,13 +318,13 @@ If we have n features, d degree: `PolynomialFeatures` transform into `(n+d)! / (
 
 **Learning Curve**
 - Plot `training errors` and `validation errors` over training set sizes (using cross-validation)\
-    - Overfitting: *gap* between the curves
-    - Underfitting: *Plateau* (adding more training samples do not help)
+    - Overfitting: *gap* between the curves.\
+    - Underfitting: *Plateau* (adding more training samples do not help).
 
-> So how do we handle the overfitting/underfitting model?
+**So how do we handle the overfitting/underfitting model?**
 
-- Overfitting: Change too simpler model, feeding more training data, constrain the weights of unimportant features\
-- Underfitting: Change to more complex algorithm; better features
+- Overfitting: Change too simpler model, feeding more training data, constrain the weights of unimportant features.\
+- Underfitting: Change to more complex algorithm; better features.
 
 ::: {.callout-important}
 ## Bias-Variation Trade-Off
@@ -351,7 +355,7 @@ As mentioned above, to reduce overfitting we constrain the weights of model. The
 - Find out more about *RidgeCV*, *LassoCV* and *ElasticNetCV*
 :::
 
-@fig-l1-l2
+![L1-L2 norm](images/l1_l2.png){#fig-l1-l2}
 
 ### Ridge Regression
 Add a *regularization term (L2 norm)* to the MSE cost function of Linear regression in order to keep the weights as small as possible

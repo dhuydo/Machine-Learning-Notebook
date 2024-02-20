@@ -55,5 +55,14 @@
     "decision-tree.html": "dba38055",
     "decision-tree.tex": "01828d9f",
     "decision-tree.epub": "1663134a"
+  },
+  "dimensionality-reduction.qmd": {
+    "dimensionality-reduction.html": "1c481450"
+  },
+  "ensemble-learning.qmd": {
+    "ensemble-learning.html": "d1e29865"
+  },
+  "unsupervised-learning.qmd": {
+    "unsupervised-learning.html": "94cfe722"
   }
 }

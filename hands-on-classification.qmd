@@ -1,6 +1,9 @@
+---
+execute:
+    freeze: auto
+---
+
 # Hands-on Classification {#sec-hands-on-classification}
-
-
 
 ## Describe the used dataset
 

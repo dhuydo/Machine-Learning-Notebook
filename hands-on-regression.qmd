@@ -1,3 +1,8 @@
+---
+execute:
+    freeze: auto
+---
+
 # Hands-on regression {#sec-regression}
 
 ::: {.callout-tip collapse="true"}
@@ -53,17 +58,17 @@ In this chapter we’ll use the California Housing Prices dataset from the StatL
 **Answers**
 
 - Predict median housing price in any district. The results are used for another ML system for investment analysis. The current solution is to gather up-to-date information about a district, or to estimate manually using complex rules if no information.
-- The current solution is costly and time-consuming, and it was often off by more than 30%. Therefore, a ML model could be more useful
+- The current solution is costly and time-consuming, and it was often off by more than 30%. Therefore, a ML model could be more useful.
 - Data pipelines: A sequence of data processing components. Pipelines are very common in machine learning systems, since there is a lot of data to manipulate and many data transformations to apply.
-- This is a regression task (labeled data), batch learning (data is quite small and not change too much) and model-based learning
+- This is a regression task (labeled data), batch learning (data is quite small and do not change too much) and model-based learning
 - Metrics for regression:
 
 ::: {.callout-note collapse="true"}
 ## Expand to learn more about metrics
 Both the RMSE and the MAE are ways to measure the distance between two vectors: the vector of predictions and the vector of target values. Various distance measures, or norms, are possible:\
-• Computing the root of a sum of squares (RMSE) corresponds to the Euclidean norm: this is the notion of distance we are all familiar with. It is also called the l2 norm, noted |·|₂ (or just |·|).\
-• Computing the sum of absolutes (MAE) corresponds to the l1 norm, noted |·|₁. This is sometimes called the Manhattan norm because it measures the distance between two points in a city if you can only travel along orthogonal city blocks.\
-• More generally, the lk norm of a vector v containing n elements is defined as ∥v∥k = (|v₁|ᵏ + |v₂|ᵏ + ... + |vₙ|ᵏ)¹/ᵏ. l0 gives the number of nonzero elements in the vector, and l∞ gives the maximum absolute value in the vector.\
+	- Computing the root of a sum of squares (RMSE) corresponds to the Euclidean norm: this is the notion of distance we are all familiar with. It is also called the l2 norm, noted |·|₂ (or just |·|).\
+	- Computing the sum of absolutes (MAE) corresponds to the l1 norm, noted |·|₁. This is sometimes called the Manhattan norm because it measures the distance between two points in a city if you can only travel along orthogonal city blocks.\
+	- More generally, the lk norm of a vector v containing n elements is defined as ∥v∥k = (|v₁|ᵏ + |v₂|ᵏ + ... + |vₙ|ᵏ)¹/ᵏ. l0 gives the number of nonzero elements in the vector, and l∞ gives the maximum absolute value in the vector.\
 The higher the norm index, the more it focuses on large values and neglects small ones. This is why the RMSE is more sensitive to outliers than the MAE. But when outliers are exponentially rare (like in a bell-shaped curve), the RMSE performs very well and is generally preferred.
 ![L1 norm and L2 norm](images/l1_l2.png){#fig-l1-l2}
 :::
@@ -187,7 +192,7 @@ for df in [x_train, x_test]:
 
 ## Explore and visualize the data to gain insights
 
-If the data is very large, we will sample an exploration set to manipulate faster and easier. On the other hand, just work directly on full set if the data is quite small
+If the data is very large, we will sample an exploration set to manipulate faster and easier. On the other hand, just work directly on full set if the data is quite small.
 
 ```{python}
 df_vis = data.copy()
@@ -276,3 +281,271 @@ df_vis['people_per_house'] = df_vis['population']/df_vis['households']
 corr_matrix = df_vis.corr(numeric_only=True)
 corr_matrix['median_house_value'].sort_values(ascending=False)
 ```
+
+
+## Explore and Visualize Data
+
+- Visualize 
+- Compute correlation (corr_matrix(), pandas.plotting.scatter_matrix() )
+- Attributes combination
+
+
+## Prepare Data
+
+Benefits:
+- Reproduce tranformations easily
+- Build library of tranformations for future projects
+- Use in live system to transform new data
+- Try various transformations => Choose best combination of transformations
+
+
+### Clean Data
+
+Missing Values:
+- Get rid of them
+- Get rid of whole attributes
+- Set new values (imputation): zero, mean, median, most_frequent, constant, etc. 
+	- sklearn.impute.SimpleImputer()
+	- Apply to all numerical variables cause we do not know there will not be any missing values in the future.
+	- More powerful imputer: KnnImputer(), IterativeImputer()
+
+
+### Handling Text and Categorical Attributes
+
+-  OneHotEncoder, LabelEncoder, OrdinalEncoder
+	- default: Scipy sparse matrix => set sparse=False or toarray()
+	- pandas.get_dummies(): generate new columns for unknown categories
+	- OneHotEncoder: detect unknown categories
+-  If a categorical attribute has a large number of possible categories
+	=> OneHotEncoder will be result in a large number of input features
+	- Turn categorical -> numerical category
+	- In *neural networks*: replace each category -> *embedding* (a learnable, low-dimensional vector)
+
+
+### Feature Scaling and Tranformations
+
+#### For input attributes
+
+- Some ML algorithms don’t perform well when the input numerical attributes have very different scales.
+- Without any scaling, most models will be biased toward ignoring the small values and focusing more on the larger values.
+
+Two common feature scaling techniques: *min-max scaling* and *standardization*
+- Use *fit* or *fit_transform* only on **training set**
+- **Training set** will always be scaled to specific range, if new data contains outliers, these may end up scaled outside the range => Set clip hyperparameter to *True* to avoid.
+
+- **Min-max scaling (normalization)**: 
+- Default range: 0-1
+- MinMaxScaler(feature_range=(-1,1)): change the prefered range
+
+- **Standardization**: 
+- Less affected by outliers
+- StandardScaler(with_mean=False): only divide the data by the standard deviation, without subtracting the mean => scale sparse matrix without converting to dense matrix 
+
+- *Heavy-tailed attributes*:
+- Both min-max scaling and standardization will squash most values into a small range
+- Solutions: square root (or power 0-1), logarithm, bucketizing
+	- bucketizing: chop its distribution into equal-sized buckets => replace with the index (i.e. *percentile*, *categories (for multimodal distribution)*) of buckets.
+		- *multimodal distribution*: 2 or more clear peaks (also called mode).
+	- other options for *multimodal distribution*: Gaussian radial basic function (RBF) measure the similarity between that attribute and the modes.
+
+#### For output
+
+After feature scaling the target values to make predictions on new data, it has to be *inverse_transform()*, or just do TransformedTargetRegressor.
+ 
+```{python}
+from sklearn.compose import TransformedTargetRegressor
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import StandardScaler
+
+model = TransformedTargetRegressor(LinearRegression(),
+                                       transformer=StandardScaler())
+
+# model.fit(housing[["median_income"]], housing_labels)
+# predictions = model.predict(some_new_data)
+```
+
+
+### Custom Transformers
+
+Write own custom transformers: custom transformations, cleanup operations, or combining specific attributes.
+
+```{python}
+from sklearn.preprocessing import FunctionTransformer
+```
+
+***For details, check p.79, 80, 81***
+
+-  A transformer should contains:
+	- fit(): self.n_features_in_ , return *self*
+	- get_feature_names_out() => to create DataFrame after *transform*
+	- inverse_transform()
+
+-  This is a custom transformer using *KMeans clusterer* in the fit() method to identify the main clusters in the training data, and then uses *rbf_kernel()* in the transform() method to measure how similar each sample is to each cluster center:
+
+```{python}
+from sklearn.cluster import KMeans
+from sklearn.base import BaseEstimator, TransformerMixin
+
+class ClusterSimilarity(BaseEstimator, TransformerMixin):  
+	def __init__(self, n_clusters=10, gamma=1.0, random_state=None):
+		self.n_clusters = n_clusters
+		self.gamma = gamma
+		self.random_state = random_state
+
+	def fit(self, X, y=None, sample_weight=None):  
+		self.kmeans_ = KMeans(self.n_clusters, random_state=self.random_state) 
+		self.kmeans_.fit(X, sample_weight=sample_weight)  
+		return self # always return self!
+
+	def transform(self, X):  
+		return rbf_kernel(X, self.kmeans_.cluster_centers_, gamma=self.gamma)
+
+	def get_feature_names_out(self, names=None):  
+		return [f"Cluster {i} similarity" for i in range(self.n_clusters)]
+```
+
+***For details, check p.82***
+
+- You can check whether your custom estimator respects *Scikit-Learn’s API* by passing an instance to check_estimator() from the sklearn.utils.estimator_checks package. For the full API, check out https://scikit-learn.org/stable/developers.
+
+
+### Transformation Pipelines
+
+- **Pipeline**: sequence of transformations => Take list of names/estimators
+
+	- Names must be *unique* and do not contain *double underscores* 
+	- First (n-1) names: *transformers*
+		Last name: regardless *transformer* or *predictor*
+
+2 ways: 
+
+**Pipeline**
+
+```{python}
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+num_pipeline = Pipeline([
+    ("impute", SimpleImputer(strategy="median")),
+    ("standardize", StandardScaler()),
+])
+```
+
+**make_pipeline** (don't care naming estimators)
+
+```{python}
+from sklearn.pipeline import make_pipeline  
+
+num_pipeline = make_pipeline(SimpleImputer(strategy="median"), StandardScaler())
+```
+
+- The pipeline exposes the same methods as the *final estimator* (transformer or predictor)
+
+-  In a Jupyter notebook, if we import sklearn and run sklearn.set_config(display="diagram"), all Scikit-Learn estimators will be rendered as interactive diagrams. This is particularly useful for visualizing pipelines. To visualize *num_pipeline*, run a cell with num_pipeline as the last line. Clicking an estimator will show more details.
+
+
+-  2 ways to apply transform for numerical attributes and categorical attributes *seperately*:
+
+**ColumnTransformer**:
+
+```{python}
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline, make_pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import StandardScaler, OneHotEncoder
+
+num_attribs = ["longitude", "latitude", "housing_median_age", "total_rooms", "total_bedrooms", "population", "households", "median_income"]
+
+cat_attribs = ["ocean_proximity"]
+
+num_pipeline = Pipeline([
+    ("impute", SimpleImputer(strategy="median")),
+    ("standardize", StandardScaler()),
+
+])
+cat_pipeline = make_pipeline(
+    SimpleImputer(strategy="most_frequent"),
+    OneHotEncoder(handle_unknown="ignore"))
+
+preprocessing = ColumnTransformer([
+    ("num", num_pipeline, num_attribs),
+    ("cat", cat_pipeline, cat_attribs),
+
+])
+```
+
+**make_column_selector**, **make_column_transformer** (don't care naming estimators)
+
+```{python}
+from sklearn.compose import make_column_selector, make_column_transformer
+
+preprocessing = make_column_transformer(
+	(num_pipeline, make_column_selector(dtype_include=np.number)),
+	(cat_pipeline, make_column_selector(dtype_include=object)),
+
+)
+```
+
+- Drop or passthrough columns: ***For details, see p.86**
+
+
+- **Recap Pipeline**
+
+- Missing values in numerical features will be imputed by replacing them with the median, as most ML algorithms don’t expect missing values. In categorical features, missing values will be replaced by the most frequent category.
+    
+- The categorical feature will be one-hot encoded, as most ML algorithms only accept numerical inputs.
+    
+- A few ratio features will be computed and added: bedrooms_ratio, rooms_per_house, and people_per_house. Hopefully these will better correlate with the median house value, and thereby help the ML models.
+    
+- A few cluster similarity features will also be added. These will likely be more useful to the model than latitude and longitude.
+    
+- Features with a long tail will be replaced by their logarithm, as most models prefer features with roughly uniform or Gaussian distributions.
+    
+- All numerical features will be standardized, as most ML algorithms prefer when all features have roughly the same scale.
+
+
+**Final Pipeline**:
+
+```{python}
+def column_ratio(X):  
+	return X[:, [0]] / X[:, [1]]
+    
+def ratio_name(function_transformer, feature_names_in): 
+	return ["ratio"] #feature names out
+    
+def ratio_pipeline(): 
+	return make_pipeline(
+		SimpleImputer(strategy="median"),
+		FunctionTransformer(column_ratio, feature_names_out=ratio_name),
+		StandardScaler())
+    
+log_pipeline = make_pipeline(
+	SimpleImputer(strategy="median"),
+	FunctionTransformer(np.log, feature_names_out="one-to-one"),
+	StandardScaler())
+    
+cluster_simil = ClusterSimilarity(n_clusters=10, gamma=1., random_state=42)
+
+default_num_pipeline = make_pipeline(SimpleImputer(strategy="median"),
+	    StandardScaler())
+    
+preprocessing = ColumnTransformer([
+	("bedrooms", ratio_pipeline(), ["total_bedrooms", "total_rooms"]),
+	("rooms_per_house", ratio_pipeline(), ["total_rooms", "households"]),
+	("people_per_house", ratio_pipeline(), ["population", "households"]),
+	("log", log_pipeline, ["total_bedrooms", "total_rooms", "population",
+
+							"households", "median_income"]),
+	("geo", cluster_simil, ["latitude", "longitude"]),
+
+	("cat", cat_pipeline, make_column_selector(dtype_include=object)),
+	],
+	remainder=default_num_pipeline) # one column remaining: housing_median_age
+```
+
+
+
+
+
+
+
+

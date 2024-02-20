@@ -1,5 +1,9 @@
-# Support Vector Machine {#sec-svm}
+---
+execute:
+    freeze: auto
+---
 
+# Support Vector Machine {#sec-svm}
 
 
 Support Vector Machine (SVM) is a powerful and versatile machine learning model, capable of performing linear or nonlinear classification, regression, and even novelty detection. It works well with small to medium-sized datasets, but unfortunately do not scale well and sensitive to feature scaling.

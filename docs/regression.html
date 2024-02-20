@@ -206,8 +206,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dim-reduction.html" class="sidebar-item-text sidebar-link">
+  <a href="./dimensionality-reduction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dimensionality Reduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ensemble-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ensemble Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unsupervised-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -222,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./metrics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
   </div>
 </li>
       </ul>
@@ -277,7 +289,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="linear-regression" class="level2" data-number="3.1">
 <h2 data-number="3.1" class="anchored" data-anchor-id="linear-regression"><span class="header-section-number">3.1</span> Linear Regression</h2>
 <p>Suppose that we have a data set of demographic and healthcare cost for each individual in a city, and we want to predict the total healthcare cost based on age.</p>
-<p>If we use linear regression method for this task, we will assump that the relationship between these features is <em>linear</em> and try to fit a <code>line</code> so that is closest to the data. The plot looks like this.</p>
+<p>If we use linear regression method for this task, we will assump that the relationship between these features is <em>linear</em> and try to fit a line so that is closest to the data. The plot looks like this.</p>
 <div class="cell" data-execution_count="1">
 <details>
 <summary>Code</summary>
@@ -411,7 +423,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 X^{+} = VΣ^{+}U^{T}
 \end{gather}
 \]</span></p>
-<p>Implement Linear regression using sklearn</p>
+<p>Implement Linear Regression using sklearn</p>
 <div class="cell" data-execution_count="4">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -457,7 +469,7 @@ Loop step 3-5 until <strong>converge</strong>:<br>
 <li>Compute new weights: New = Old - StepSize</li>
 </ol>
 <ul>
-<li>[i] Run single epoch:
+<li>Run single epoch:
 <ul>
 <li>partial_fit(): ignore (<em>max_iter</em>, <em>tol</em>) do not reset epoch counter</li>
 <li>fit(warm_start = True)</li>
@@ -655,14 +667,13 @@ MSE = \frac{1}{2m}\sum_{i=1}^{m}{(θ^{T}x_{i}-y_{i})}^2
 - Overfitting: model perform well on train set, generate poorly on validation set<br>
 - Underfitting: perform poorly on both train and validation sets</p>
 <p><strong>Learning Curve</strong> - Plot <code>training errors</code> and <code>validation errors</code> over training set sizes (using cross-validation)<br>
-- Overfitting: <em>gap</em> between the curves - Underfitting: <em>Plateau</em> (adding more training samples do not help)</p>
-<blockquote class="blockquote">
-<p>So how do we handle the overfitting/underfitting model?</p>
-</blockquote>
+- Overfitting: <em>gap</em> between the curves.<br>
+- Underfitting: <em>Plateau</em> (adding more training samples do not help).</p>
+<p><strong>So how do we handle the overfitting/underfitting model?</strong></p>
 <ul>
-<li>Overfitting: Change too simpler model, feeding more training data, constrain the weights of unimportant features<br>
+<li>Overfitting: Change too simpler model, feeding more training data, constrain the weights of unimportant features.<br>
 </li>
-<li>Underfitting: Change to more complex algorithm; better features</li>
+<li>Underfitting: Change to more complex algorithm; better features.</li>
 </ul>
 <div class="callout callout-style-simple callout-important callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -711,7 +722,12 @@ Bias-Variation Trade-Off
 </div>
 </div>
 </div>
-<p><span class="quarto-unresolved-ref">?fig-l1-l2</span></p>
+<div id="fig-l1-l2" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="images/l1_l2.png" class="img-fluid figure-img"></p>
+<figcaption class="figure-caption">Figure&nbsp;3.5: L1-L2 norm</figcaption>
+</figure>
+</div>
 <section id="ridge-regression" class="level3" data-number="3.4.1">
 <h3 data-number="3.4.1" class="anchored" data-anchor-id="ridge-regression"><span class="header-section-number">3.4.1</span> Ridge Regression</h3>
 <p>Add a <em>regularization term (L2 norm)</em> to the MSE cost function of Linear regression in order to keep the weights as small as possible</p>

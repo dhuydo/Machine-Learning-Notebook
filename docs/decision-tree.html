@@ -65,7 +65,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./dim-reduction.html" rel="next">
+<link href="./dimensionality-reduction.html" rel="next">
 <link href="./svm.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -206,8 +206,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dim-reduction.html" class="sidebar-item-text sidebar-link">
+  <a href="./dimensionality-reduction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dimensionality Reduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ensemble-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ensemble Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unsupervised-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -222,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./metrics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
   </div>
 </li>
       </ul>
@@ -287,7 +299,7 @@ Important notes to remember
 </p></li>
 <li><p>Ensemble methods, such as Random Forests and Gradient Boosting, often use multiple decision trees to enhance predictive performance and address the limitations of individual trees.<br>
 </p></li>
-<li><p>Decision Tree <em>(white box model, interpretable ML)</em> vs Random Forest, NNs <em>(black box model)</em></p></li>
+<li><p>Decision Tree is white box model which is interpretable ML, vs Random Forest, Neural Networks is black box model (not easy to interpret).</p></li>
 <li><p>Some DT algorithm:</p>
 <ul>
 <li>ID3, C4.5 (Information Gain/ Information Gain Ratio)<br>
@@ -358,7 +370,7 @@ Important notes to remember
 <li>Branch nodes: split data based on statements</li>
 <li>Leaf nodes: output, no child nodes</li>
 </ol>
-<p><a href="#fig-decision-tree">Figure&nbsp;<span>9.2</span></a>, in a node:<br>
+<p><a href="#fig-decision-tree">Figure&nbsp;<span class="quarto-unresolved-ref">fig-decision-tree</span></a>, in a node:<br>
 - Samples: count instances in that node<br>
 - Value: count instances of each class<br>
 - Gini (Gini impurity): a measurement, measure a node is pure (0) or not (-&gt; 1) <span class="math display">\[G_{i}=1-\sum_{k=1}^{n}p_{i,k}^{2}\]</span></p>
@@ -528,7 +540,7 @@ J_{k, t_k} = \frac{m_{left}}{m} MSE_{left} + \frac{m_{right}}{m} MSE_{right}
 <p><img src="decision-tree_files/figure-html/cell-5-output-2.png" width="540" height="389"></p>
 </div>
 </div>
-<p>If we set <em>max_depth</em> larger, the model will predict more strictly. As same as <a href="#fig-different-max-depth">Figure&nbsp;<span>9.4</span></a>, if we keep the default hypeparameters, the model will grow as much as it can <a href="#fig-regularized-tree">Figure&nbsp;<span>9.5</span></a>.</p>
+<p>If we set <em>max_depth</em> larger, the model will predict more strictly. As same as <a href="#fig-different-max-depth">Figure&nbsp;<span class="quarto-unresolved-ref">fig-different-max-depth</span></a>, if we keep the default hypeparameters, the model will grow as much as it can <a href="#fig-regularized-tree">Figure&nbsp;<span class="quarto-unresolved-ref">fig-regularized-tree</span></a>.</p>
 <div id="fig-different-max-depth" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/different-max-depth.png" class="img-fluid figure-img"></p>
@@ -554,7 +566,7 @@ J_{k, t_k} = \frac{m_{left}}{m} MSE_{left} + \frac{m_{right}}{m} MSE_{right}
 </figure>
 </div>
 <p>=&gt; <strong>Solution</strong>: Scale data -&gt; PCA: reduce dimensions but do not loss too much information, rotate data to reduce correlation between features, which often (not always) makes things easier for trees.</p>
-<p>Compare to <a href="#fig-decision-tree">Figure&nbsp;<span>9.2</span></a>, the scaled and PCA-rotated iris dataset is separated easier.</p>
+<p>Compare to <a href="#fig-decision-tree">Figure&nbsp;<span class="quarto-unresolved-ref">fig-decision-tree</span></a>, the scaled and PCA-rotated iris dataset is separated easier.</p>
 <div id="fig-scaled-decision-tree" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/scaled-decision-tree.png" class="img-fluid figure-img"></p>
@@ -925,7 +937,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./dim-reduction.html" class="pagination-link">
+      <a href="./dimensionality-reduction.html" class="pagination-link">
         <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dimensionality Reduction</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>

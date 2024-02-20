@@ -172,8 +172,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dim-reduction.html" class="sidebar-item-text sidebar-link">
+  <a href="./dimensionality-reduction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dimensionality Reduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ensemble-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ensemble Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unsupervised-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -188,7 +200,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./metrics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
   </div>
 </li>
       </ul>
@@ -232,17 +244,17 @@ ul.task-list li input[type="checkbox"] {
 <section id="batch-gradient-descent" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="batch-gradient-descent"><span class="header-section-number">4.1</span> Batch Gradient Descent</h2>
 <ul>
-<li>[i] Full Gradient Descent =&gt; <em>terribly slow</em></li>
-<li>[i] Gradient: <span class="math display">\[∇ = \frac{1}{m} X^{T}(Χθ-y)\]</span></li>
-<li>[i] Scale well with number of features</li>
+<li><p>[i] Full Gradient Descent =&gt; <em>terribly slow</em></p></li>
+<li><p>[i] Gradient: <span class="math display">\[∇ = \frac{1}{m} X^{T}(Χθ-y)\]</span></p></li>
+<li><p>Scale well with number of features</p></li>
 </ul>
 </section>
 <section id="stochastic-gradient-descent" class="level2" data-number="4.2">
 <h2 data-number="4.2" class="anchored" data-anchor-id="stochastic-gradient-descent"><span class="header-section-number">4.2</span> Stochastic Gradient Descent</h2>
 <ul>
-<li>[i] Pick a random instance at every <em>step</em> (not <em>epoch</em>) to compute <em>gradient</em></li>
-<li>[i] Out-of-core algorithm</li>
-<li>[!] Cost function: cost function is erratic, continue bounch around when get to the global minimum
+<li>Pick a random instance at every <em>step</em> (not <em>epoch</em>) to compute <em>gradient</em></li>
+<li>Out-of-core algorithm</li>
+<li>Cost function: cost function is erratic, continue bounch around when get to the global minimum
 <ul>
 <li>Can jump out local minimum</li>
 <li>Weights are good, not optimal =&gt; Improve by set <em>gradually reduce learning_rate</em> (called <em>learning schedule</em>)</li>
@@ -253,10 +265,9 @@ ul.task-list li input[type="checkbox"] {
 <section id="mini-batch-gradient-descent" class="level2" data-number="4.3">
 <h2 data-number="4.3" class="anchored" data-anchor-id="mini-batch-gradient-descent"><span class="header-section-number">4.3</span> Mini-Batch Gradient Descent</h2>
 <ul>
-<li>[i] Compute <em>gradient</em> on small random sets called <em>mini-batches</em> (boost by GPUs)</li>
-<li>[i] Less erratic</li>
+<li>Compute <em>gradient</em> on small random sets called <em>mini-batches</em> (boost by GPUs)</li>
+<li>Less erratic</li>
 </ul>
-<p>[[Pasted image 20240115083333.png]]</p>
 
 
 </section>

@@ -1,10 +1,46 @@
+---
+execute:
+    freeze: auto
+---
+
 # Welcome {.unnumbered}
 
-Helo be iu
 
-Are you curious about how Google Translate works across 133 languages, how Recommendation Systems work on E-commerce platforms, how Autopilot in self-driving cars work or even how Robots interact with their surroundings?
+Hello be iu, my name is Nguyen Cao Duc Huy. I am studying Master of Data Science at HCMUS. 
 
-These are some of the applications of Machine Learning in real life. So what actually is Machine Learning ?
+This notebook covers some Machine Learning algorithms and practical exercises, has been written while I understanding ML concepts. Hopefully it will help you systemize knowledge and be able to work in this interesting and fast-evolving field.
 
-Hi everyone, my name is Nguyen Cao Duc Huy. I am studying Master of Data Science at HCMUS. I intent to write some posts to share my knowledge and experience of Machine Learning in a close and understandable way and focus more on practicing. Hope they will help you understand and be able to work in this interesting and fast-evolving field.
+**Contents of this notebook are as follow:**
 
+1. [The Machine Learning Landscape](landscape.qmd)
+2. [Machine Learning Project Workflow](./project-checklist.qmd)
+3. [Regression algorithms](./regression.qmd)
+4. [Gradient Descent](./gradient-descent.qmd)
+5. [Hands-on Regression](./hands-on-regression.qmd)
+6. [Classification algorithms](./classification.qmd)
+7. [Hands-on Classification](./hands-on-classification.qmd)
+8. [Support Vector Machine](./svm.qmd)
+9. [Decision Tree](./decision-tree.qmd)
+10. [Dimensionality Reduction](./dimensionality-reduction.qmd)
+11. [Ensemble Learning](./ensemble-learning.qmd)
+12. [Unsupervised Learning](./unsupervised-learning.qmd)
+
+
+**In Progress:**
+
+- [ ] Fundamental Neural Networks (NNs)
+- [ ] Loading and Preprocessing Data for NNs
+- [ ] Training Deep NNs
+- [ ] Customize NNs
+- [ ] Convolutional Neural Networks (CNNs) and Recurrent Neural Networks (RNNs)
+- [ ] Computer Vision using NNs
+- [ ] Natural Language Processing (NLP) using NNs
+- [ ] Autoencoders, GANs, and Diffusion Models
+- [ ] Reinforcement Learning
+- [ ] Training and Deploying NNs models at Scale
+
+
+**References**
+
+1. Aurélien Géron (2023). Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow (3rd ed.). O’Reilly.
+2. Jeremy Howard & Sylvain Gugger. Deep Learning for Coders with fastai & PyTorch. O’Reilly.

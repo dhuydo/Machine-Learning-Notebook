@@ -170,8 +170,20 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./dim-reduction.html" class="sidebar-item-text sidebar-link">
+  <a href="./dimensionality-reduction.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Dimensionality Reduction</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./ensemble-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Ensemble Learning</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./unsupervised-learning.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Unsupervised Learning</span></span></a>
   </div>
 </li>
         <li class="sidebar-item sidebar-item-section">
@@ -186,7 +198,7 @@ ul.task-list li input[type="checkbox"] {
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./metrics.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Metrics and scoring</span></span></a>
   </div>
 </li>
       </ul>
@@ -254,23 +266,23 @@ ul.task-list li input[type="checkbox"] {
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-Expand to View Questions from the Lesson
+Expand to view questions from the lesson
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li>What is Machine Learning (ML)? Comparing ML Approach versus Traditional one?</li>
+<li>What is Machine Learning (ML)? Comparing ML approach versus traditional one?</li>
 <li>Applications of ML? Tasks that ML especially useful for?</li>
-<li>Present Types of ML System according to:
+<li>Present types of ML system according to:
 <ul>
-<li>Training Supervision: Supervised Learning, Unsupervised Learning, Reinforcement Learning, etc.</li>
-<li>Batch Learning versus Online Learning</li>
-<li>Instance-based versus Model-based</li>
+<li>Training Supervision: Supervised learning, unsupervised learning, reinforcement learning, etc.</li>
+<li>Batch learning versus online learning</li>
+<li>Instance-based versus model-based</li>
 </ul></li>
-<li>Main Challenges of ML?</li>
-<li>The ML Project Workflow?</li>
+<li>Main challenges of ML?</li>
+<li>The ML project workflow?</li>
 </ol>
 </div>
 </div>
@@ -281,7 +293,7 @@ Expand to View Questions from the Lesson
 <p>“Machine learning is the field of study that gives computers the ability to learn without being explicitly programmed.” — Arthur Samuel, 1959</p>
 </blockquote>
 <p><strong>Traditional Approach</strong></p>
-<p>If you have a task using data to make a prediction (e.g.&nbsp;classification), with traditional approach you have to come up with a bunch of if-else clauses to handle it.<br>
+<p>If you have a task using data to make a prediction (e.g.&nbsp;classification), with traditional approach you might have to come up with a bunch of if-else clauses to handle it.<br>
 </p>
 <p>For example, to write a spam email filter program, you have to know some words or phrases that usually appear in a spam email, then your program would flag emails as spam if a number of these patterns were detected. Finally, you would test your program until it was good enough to launch.</p>
 <div id="fig-traditional-approach" class="quarto-figure quarto-figure-center anchored">
@@ -290,7 +302,7 @@ Expand to View Questions from the Lesson
 <figcaption class="figure-caption">Figure&nbsp;1.1: Traditional approach</figcaption>
 </figure>
 </div>
-<p>But how is it if the spammers notice the rules that we set?</p>
+<p><strong>But how is it if the spammers notice the rules that we set?</strong></p>
 <p>They will adjust these patterns a little bit that our program cannot detect, and if they keep working around our spam filter, we will need to keep writing new rules that gradually become a very long complex list. This is where the ML approach comes into play.</p>
 <p><strong>The Machine Learning Approach</strong></p>
 <p>As Arthur Samuel said, the ML system can learn patterns from the data without being explicitly programmed.</p>
@@ -305,24 +317,24 @@ Expand to View Questions from the Lesson
 <section id="applications-of-machine-learning" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="applications-of-machine-learning"><span class="header-section-number">1.2</span> Applications of Machine Learning</h2>
 <p><em>Common tasks</em><br>
-- Regression: Forecast revenue, weather, impact of certificate scores on admission, financial and logistical forecasting<br>
-- Classification: Anomaly detection<br>
-- Clustering: Segmenting clients<br>
+- Regression: Forecast revenue, weather, impact of certificate scores on admission, financial and logistical forecasting.<br>
+- Classification: Anomaly detection.<br>
+- Clustering: Segmenting clients.<br>
 </p>
 <p><em>Natural Language Processing</em><br>
-Text classification (topic modeling, flagging offensive comments), text summarization, questions-answering modules (chatbot), speech recognition</p>
+Text classification (topic modeling, flagging offensive comments), text summarization, questions-answering modules (chatbot), speech recognition.</p>
 <p><em>Computer vision</em><br>
-Image classification, semantic image segmentation, face recognition, image captioning</p>
+Image classification, semantic image segmentation, face recognition, image captioning.</p>
 <p><em>Recommendation system</em><br>
-Web search, product recommendations, home page layout</p>
+Web search, product recommendations, home page layout.</p>
 <p><em>Robotics</em><br>
-Handling objects, decision-making</p>
+Handling objects, decision-making.</p>
 <p><em>Medicine</em><br>
-Finding anomalies in radiology images, measuring features in ultrasounds</p>
+Finding anomalies in radiology images, measuring features in ultrasounds.</p>
 <p><em>Biology</em><br>
-Classifying cell/proteins, tumor-normal sequencing and classifying</p>
+Classifying cell/proteins, tumor-normal sequencing and classifying.</p>
 <p><em>Playing games</em><br>
-Chess, Go, most Atari video games, and many real-time strategy games</p>
+Chess, Go, most Atari video games, and many real-time strategy games.</p>
 <div class="callout callout-style-simple callout-note">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -330,14 +342,9 @@ Chess, Go, most Atari video games, and many real-time strategy games</p>
 </div>
 <div class="callout-body-container">
 <p><strong>To summarize, machine learning is especially great for:</strong><br>
-</p>
-<ul>
-<li>Problems for which existing solutions are complex and/or require a lot of work<br>
-</li>
-<li>Fluctuating environments, hard/retrain to keep up to date<br>
-</li>
-<li>Getting insights about complex problems and large amounts of data</li>
-</ul>
+- Problems for which existing solutions are complex and/or require a lot of work.<br>
+- Fluctuating environments, hard/retrain to keep up to date.<br>
+- Getting insights about complex problems and large amounts of data.</p>
 </div>
 </div>
 </div>
@@ -351,62 +358,56 @@ Chess, Go, most Atari video games, and many real-time strategy games</p>
 </div>
 <div class="callout-body-container">
 <p><strong>Machine Learning Systems are divided into 3 common types based on:</strong><br>
-</p>
-<ul>
-<li>Training supervision: <code>supervised learning</code>, <code>unsupervised learning</code>, <code>reinforcement learning</code><br>
-</li>
-<li>Learn on the fly or not: <code>online learning</code> versus <code>batch learning</code><br>
-</li>
-<li>Learn by heart or detect patterns: <code>instance-based learning</code> versus <code>model-based learning</code></li>
-</ul>
+- Training supervision: supervised learning, unsupervised learning, reinforcement learning.<br>
+- Learn on the fly or not: online learning versus batch learning.<br>
+- Learn by heart or detect patterns: instance-based learning versus model-based learning.</p>
 </div>
 </div>
 </div>
 <section id="training-supervision" class="level3" data-number="1.3.1">
 <h3 data-number="1.3.1" class="anchored" data-anchor-id="training-supervision"><span class="header-section-number">1.3.1</span> Training Supervision</h3>
-<p>How they <code>supervised</code>: supervised, unsupervised, semi-supervised, self-supervised, etc.</p>
+<p>How they supervised: supervised, unsupervised, semi-supervised, self-supervised, etc.</p>
 <ul>
-<li><code>Supervised</code>: Classification and Regression</li>
-<li><code>Unsupervised</code>: Clustering, Dimensionality Reduction, Association Rule Learning</li>
-<li><code>Semi-supervised</code>: Partially labeled</li>
-<li><code>Self-supervised</code>: Unlabeled -&gt; Fully labeled. Learn to generate labels. Unlike unsupervised learning, self-supervised focuses on classification and regression, although it learns from fully unlabeled data</li>
-<li><code>Reinforcement Learning</code>: Optimize rewards -&gt; Find best strategy (called <em>policy</em>) itself</li>
+<li><strong>Supervised</strong>: Classification and Regression.</li>
+<li><strong>Unsupervised</strong>: Clustering, Dimensionality Reduction, Association Rule Learning.</li>
+<li><strong>Semi-supervised</strong>: Partially labeled.</li>
+<li><strong>Self-supervised</strong>: Unlabeled -&gt; Fully labeled (learn to generate labels). Unlike unsupervised learning, self-supervised focuses on classification and regression, although it learns from fully unlabeled data</li>
+<li><strong>Reinforcement Learning</strong>: Optimize rewards -&gt; Find best strategy (called <em>policy</em>) itself.</li>
 </ul>
 </section>
 <section id="learn-on-the-fly" class="level3" data-number="1.3.2">
 <h3 data-number="1.3.2" class="anchored" data-anchor-id="learn-on-the-fly"><span class="header-section-number">1.3.2</span> Learn on the fly</h3>
-<p>Whether or not they can learn incrementally</p>
-<p><code>Batch Learning</code> (also called <code>Offline Learning</code>)&nbsp;</p>
-<ul>
-<li>Learn offline using all available data, apply what it has learned without learning more.<br>
-</li>
-<li>Useful for areas that do not change too much =&gt; Model’s performance will not decay fast<br>
-</li>
-<li>Not useful for fast-evolving system (ie. financial market) =&gt; Model’s performance will decay rellay fast =&gt; Have to train new model</li>
-</ul>
-<p><code>Online Learning</code> (also called <code>Incremental Learning</code>)<br>
-</p>
-<ul>
-<li>Run and learn simultanously by feeding new data sequentially called mini-batches<br>
-</li>
-<li>Suitable for rapidly changed system, limited computing resources.</li>
-<li>Important parameter: <strong>learning rate</strong></li>
-<li>Challenges: <strong>bad data</strong> =&gt; decline performance quickly =&gt; Solutions: monitor system (switch learning off, anomaly detection)</li>
-</ul>
+<p>Whether or not they can learn incrementally.</p>
+<p><strong>Batch Learning</strong> (also called Offline Learning).<br>
+- Learn offline using all available data, apply what it has learned without learning more.<br>
+- Useful for areas that do not change too much.<br>
+- Model’s performance will not decay fast.<br>
+- Not useful for fast-evolving system (ie. financial market).<br>
+- Model’s performance will decay rellay fast.<br>
+- Have to train new model.</p>
+<p><strong>Online Learning</strong> (also called Incremental Learning).<br>
+- Run and learn simultanously by feeding new data sequentially called mini-batches.<br>
+- Suitable for rapidly changed system, limited computing resources.<br>
+- Important parameter: <code>learning rate</code>.<br>
+- Challenges: <code>bad data</code>.<br>
+- Decline performance quickly.<br>
+- Solutions: monitor system (switch learning off, anomaly detection).</p>
 </section>
 <section id="instance-based-versus-model-based-learning" class="level3" data-number="1.3.3">
 <h3 data-number="1.3.3" class="anchored" data-anchor-id="instance-based-versus-model-based-learning"><span class="header-section-number">1.3.3</span> Instance-Based Versus Model-Based Learning</h3>
-<p>Compare new data to known data/Detect patterns in data</p>
-<p><code>Instance-based Learning</code><br>
-</p>
+<p>Compare new data to known data/Detect patterns in data.</p>
+<p><strong>Instance-based Learning</strong></p>
 <ul>
-<li>Learn by heart, then generalize new data using a similarity measure (e.g.&nbsp;k-Nearest Neighbors Regression)</li>
+<li>Learn by heart, then generalize new data using a similarity measure (e.g.&nbsp;k-Nearest Neighbors Regression).</li>
 </ul>
-<p><code>Model-based Learning</code><br>
+<p><strong>Model-based Learning</strong><br>
 </p>
 <ul>
-<li>Feed data as examples to model =&gt; Able to make predictions (e.g.&nbsp;Linear Regression)</li>
-<li>Minimize <strong>cost function</strong> =&gt; Find <strong>best parameters</strong></li>
+<li>Feed data as examples to model
+<ul>
+<li>=&gt; Able to make predictions (e.g.&nbsp;Linear Regression).</li>
+</ul></li>
+<li>Minimize <strong>cost function</strong> =&gt; Find <strong>best parameters</strong>.</li>
 </ul>
 </section>
 </section>
@@ -414,7 +415,7 @@ Chess, Go, most Atari video games, and many real-time strategy games</p>
 <h2 data-number="1.4" class="anchored" data-anchor-id="challenges-of-machine-learning"><span class="header-section-number">1.4</span> Challenges of Machine Learning</h2>
 <section id="insufficient-quantity-of-data" class="level3" data-number="1.4.1">
 <h3 data-number="1.4.1" class="anchored" data-anchor-id="insufficient-quantity-of-data"><span class="header-section-number">1.4.1</span> Insufficient Quantity of Data</h3>
-<p>Consider the amount of data whether it’s sufficient or not rather than abandon the algorithm</p>
+<p>Consider the amount of data whether it’s sufficient or not rather than abandon the algorithm.</p>
 <div id="fig-data-algorithm" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="images/data-algorithm.png" class="img-fluid figure-img"></p>
@@ -424,25 +425,26 @@ Chess, Go, most Atari video games, and many real-time strategy games</p>
 </section>
 <section id="non-representative-training-data" class="level3" data-number="1.4.2">
 <h3 data-number="1.4.2" class="anchored" data-anchor-id="non-representative-training-data"><span class="header-section-number">1.4.2</span> Non-representative Training Data</h3>
-<p>The training data must be representative of the new cases you want to generalize to</p>
-<ul>
-<li>If data is too small: <code>sampling noise</code></li>
-<li>If large data but flawed sampling method: <code>sampling bias</code></li>
-</ul>
+<p>The training data must be representative of the new cases you want to generalize to.<br>
+- If data is too small: sampling noise.<br>
+- If large data but flawed sampling method: sampling bias.</p>
 </section>
 <section id="poor-quality-data" class="level3" data-number="1.4.3">
 <h3 data-number="1.4.3" class="anchored" data-anchor-id="poor-quality-data"><span class="header-section-number">1.4.3</span> Poor-quality Data</h3>
 <ul>
-<li><em>Errors</em>, <em>Outliers</em>, <em>Noises</em>, etc. =&gt; Model perform badly</li>
+<li><em>Errors</em>, <em>Outliers</em>, <em>Noises</em>, etc.
+<ul>
+<li>=&gt; Model perform badly.</li>
+</ul></li>
 <li><em>Solutions</em>:
 <ul>
-<li>Remove outliers/Fix errors</li>
+<li>Remove outliers/Fix errors.</li>
 <li>Instances have missing features =&gt;
 <ul>
-<li>Ignore Instances</li>
-<li>Ignore Features</li>
-<li>Fill in Missing Values</li>
-<li>Train model with/without features</li>
+<li>Ignore Instances.</li>
+<li>Ignore Features.</li>
+<li>Fill in Missing Values.</li>
+<li>Train model with/without features.</li>
 </ul></li>
 </ul></li>
 </ul>
@@ -451,30 +453,31 @@ Chess, Go, most Atari video games, and many real-time strategy games</p>
 <h3 data-number="1.4.4" class="anchored" data-anchor-id="irrelevant-features"><span class="header-section-number">1.4.4</span> Irrelevant Features</h3>
 <p><strong>Feature Engineering</strong>:</p>
 <ul>
-<li><em>Feature Selection</em>: Select most useful features</li>
-<li><em>Feature Extraction</em>: Combine existing features to produce a more useful one</li>
-<li><em>Create new feature</em>: from exist data/gather new data</li>
+<li>Feature Selection: Select most useful features.</li>
+<li>Feature Extraction: Combine existing features to produce a more useful one.</li>
+<li>Create new feature: from exist data/gather new data.</li>
 </ul>
 </section>
 <section id="overfitting-the-training-data" class="level3" data-number="1.4.5">
 <h3 data-number="1.4.5" class="anchored" data-anchor-id="overfitting-the-training-data"><span class="header-section-number">1.4.5</span> Overfitting the Training Data</h3>
-<p>Model tends to <em>remember</em> data =&gt; Perform well on Training Data, but generalize badly (e.g.&nbsp;Fit noisy/too small data to complex models (NNs))</p>
+<p>Model tends to <em>remember</em> data.<br>
+=&gt; Perform well on training Data, but generalize badly (e.g.&nbsp;Fit noisy/too small data to complex models (NNs)).</p>
 <p><strong>Solutions</strong>:</p>
 <ul>
-<li>Choose simpler models (less parameters)</li>
-<li>Contrain models (regularization)</li>
-<li>Gather more data</li>
-<li>Reduct noise data</li>
+<li>Choose simpler models (less parameters).</li>
+<li>Contrain models (regularization).</li>
+<li>Gather more data.</li>
+<li>Reduct noise data.</li>
 </ul>
 </section>
 <section id="underfitting-the-training-data" class="level3" data-number="1.4.6">
 <h3 data-number="1.4.6" class="anchored" data-anchor-id="underfitting-the-training-data"><span class="header-section-number">1.4.6</span> Underfitting the Training Data</h3>
-<p>Model is too simple to learn underlying structure of data</p>
+<p>Model is too simple to learn underlying structure of data.</p>
 <p><strong>Solutions</strong>:</p>
 <ul>
-<li>Choose more powerful model (more parameters)</li>
-<li>Reduce the model’s contraints,</li>
-<li>Feature engineering</li>
+<li>Choose more powerful model (more parameters).</li>
+<li>Reduce the model’s contraints.</li>
+<li>Feature engineering.</li>
 </ul>
 </section>
 <section id="summarise" class="level3" data-number="1.4.7">
@@ -490,14 +493,14 @@ Chess, Go, most Atari video games, and many real-time strategy games</p>
 <section id="testing-and-validating" class="level2" data-number="1.5">
 <h2 data-number="1.5" class="anchored" data-anchor-id="testing-and-validating"><span class="header-section-number">1.5</span> Testing and Validating</h2>
 <ul>
-<li>train/val/test split</li>
-<li>Error rate on new cases: <code>generalization error</code> (also called <code>out-of-sample error</code>)</li>
-<li><code>cross-validation</code>:
+<li>Train/val/test split.</li>
+<li>Error rate on new cases: generalization error (also called out-of-sample error).</li>
+<li>Cross-validation:
 <ul>
 <li>using many small validation sets (n).</li>
 <li>Train models n times with (n-1) validation sets =&gt; Test with the rest set.</li>
 <li>Average results =&gt; much more accurate measure.</li>
-<li>Drawback: the training time is multiplied by the number of validation sets</li>
+<li>Drawback: the training time is multiplied by the number of validation sets.</li>
 </ul></li>
 </ul>
 <section id="data-mismatch" class="level3" data-number="1.5.1">

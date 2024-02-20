@@ -1,3 +1,8 @@
+---
+execute:
+    freeze: auto
+---
+
 # Metrics and scoring {#sec-metrics}
 
 
@@ -15,4 +20,4 @@
 - As this [case](hands-on-classification.qmd#evaluate-model), the result showed that with the presence of class immbalance, accuracy score is not useful metric
 
 ### Confusion matrix
-- nsdf nnsf
+- In progress
