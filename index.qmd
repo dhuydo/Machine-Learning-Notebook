@@ -6,7 +6,7 @@ execute:
 # Welcome {.unnumbered}
 
 
-Hello be iu, my name is Nguyen Cao Duc Huy. I am studying Master of Data Science at HCMUS. 
+Hello everyone, my name is Nguyen Cao Duc Huy. I am studying Master of Data Science at HCMUS. 
 
 This notebook covers some Machine Learning algorithms and practical exercises, has been written while I understanding ML concepts. Hopefully it will help you systemize knowledge and be able to work in this interesting and fast-evolving field.
 
